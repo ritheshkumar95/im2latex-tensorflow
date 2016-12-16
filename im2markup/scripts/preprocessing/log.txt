@@ -1,0 +1,3 @@
+2016-12-05 09:59:12,965 root  INFO     Script being executed: preprocess_formulas.py
+2016-12-05 09:59:13,086 root  ERROR    FAILED: cat normalized.txt.tmp | node scripts/preprocessing/preprocess_latex.js normalize > normalized.txt 
+2016-12-05 09:59:13,086 root  INFO     Jobs finished
