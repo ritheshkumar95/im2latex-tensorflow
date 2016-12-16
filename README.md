@@ -24,11 +24,17 @@ The goal is to infer the LaTeX formula that can render such an image:
  d s _ { 1 1 } ^ { 2 } = d x ^ { + } d x ^ { - } + l _ { p } ^ { 9 } \frac { p _ { - } } { r ^ { 7 } } \delta ( x ^ { - } ) d x ^ { - } d x ^ { - } + d x _ { 1 } ^ { 2 } + \; \cdots \; + d x _ { 9 } ^ { 2 }
 ```
 
-# Prerequsites
+## Sample Results From This Implementation
+
+![png](sample1.png)
+
+For more results, view results_test_2.html, results_test.html, results_validate.html files
+
+## Prerequsites
 
 Most of the code is written in tensorflow, with Python for preprocessing.
 
-#### Preprocess
+### Preprocess
 The proprocessing for this dataset is exactly reproduced as the original torch implementation by the HarvardNLP group
 
 Python
@@ -50,9 +56,13 @@ Convert is used for rending LaTex during evaluation.
 
 Webkit2png is used for rendering HTML during evaluation.
 
-### Preprocess
+### Preprocessing Instructions
 
 The images in the dataset contain a LaTeX formula rendered on a full page. To accelerate training, we need to preprocess the images.
+
+```
+cd im2markup
+```
 
 ```
 python scripts/preprocessing/preprocess_images.py --input-dir data/sample/images --output-dir data/sample/images_processed
@@ -88,27 +98,38 @@ Finally, we generate the vocabulary from training set. All tokens occuring less 
 python scripts/preprocessing/generate_latex_vocab.py --data-path data/sample/train_filter.lst --label-path data/sample/formulas.norm.lst --output-file data/sample/latex_vocab.txt
 ```
 
-### Train
+train_list_buckets.npy, valid_buckets.npy, test_buckets.npy are used to segment the train, valid, test sets based on image size. This is required as 1 batch of training data should have images all of the same size. These npy files can be generated using the DataProcessing.ipynb script
+
+```
+### Run the individual cells from this notebook
+ipython notebook DataProcessing.ipynb
+```
+
+## Train
 
 ```
 python attention.py
 ```
 Default hyperparameters used:
-. BATCH_SIZE      = 32
-. EMB_DIM         = 80
-. ENC_DIM         = 256
-. DEC_DIM         = ENC_DIM*2
-. D               = 512 (#channels in feature grid)
-. V               = 502 (vocab size)
-. NB_EPOCHS       = 50
-. H               = 20  (Maximum height of feature grid)
-. W               = 50  (Maximum width of feature grid)
+* BATCH_SIZE      = 32
+* EMB_DIM         = 80
+* ENC_DIM         = 256
+* DEC_DIM         = ENC_DIM*2
+* D               = 512 (#channels in feature grid)
+* V               = 502 (vocab size)
+* NB_EPOCHS       = 50
+* H               = 20  (Maximum height of feature grid)
+* W               = 50  (Maximum width of feature grid)
 
+The train NLL drops to 0.08 after 18 epochs of training on 24GB Nvidia M40 GPU.
 
-### Test
+## Test
 
+predict() function in the attention.py script can be used to predict from validation or test sets.
 
-### Evaluate
+Predict.ipynb can be used to display and render the results.
+
+## Evaluate
 
 #### Text Metrics
 
