@@ -30,7 +30,7 @@ The goal is to infer the LaTeX formula that can render such an image:
 
 ![png](sample1.png)
 
-For more results, view [results_test_2.html](https://rawgit.com/ritheshkumar95/im2markup-tensorflow/master/results_test_2.html), [results_test.html](https://rawgit.com/ritheshkumar95/im2markup-tensorflow/master/results_test.html), [results_validation.html](https://rawgit.com/ritheshkumar95/im2markup-tensorflow/master/results_validation.html) files.
+For more results, view [results_validset.html](https://rawgit.com/ritheshkumar95/im2markup-tensorflow/master/results_validset.html), [results_testset.html](https://rawgit.com/ritheshkumar95/im2markup-tensorflow/master/results_testset.html) files.
 
 ## Prerequsites
 

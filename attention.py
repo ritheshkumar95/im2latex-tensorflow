@@ -63,7 +63,7 @@ def predict(batch_size=32):
     import random
     from PIL import Image
     # f = np.load('train_list_buckets.npy').tolist()
-    f = np.load('test_buckets.npy').tolist()
+    f = np.load('valid_buckets.npy').tolist()
     random_key = random.choice(f.keys())
     f = f[random_key]
     imgs = []
