@@ -1,8 +1,10 @@
-# im2markup tensorflow implementation
+# im2latex tensorflow implementation
 
-This is not original work. This is a tensorflow implementation of the HarvardNLP paper - What You Get Is What You See: A Visual Markup Decompiler.
+This is a tensorflow implementation of the HarvardNLP paper - What You Get Is What You See: A Visual Markup Decompiler.
 
-See [original website](http://lstm.seas.harvard.edu/latex/) for a complete interactive version of this visualization over the test set. The paper (http://arxiv.org/pdf/1609.04938v1.pdf) provides technical details of the model.
+This is also a potential solution to OpenAI's Requests For Research Problem - [im2latex](https://openai.com/requests-for-research/#im2latex)
+
+The paper (http://arxiv.org/pdf/1609.04938v1.pdf) provides technical details of the model.
 
 Original Torch implementation of the paper[https://github.com/harvardnlp/im2markup/blob/master/]
 
@@ -111,7 +113,7 @@ ipython notebook DataProcessing.ipynb
 python attention.py
 ```
 Default hyperparameters used:
-* BATCH_SIZE      = 32
+* BATCH_SIZE      = 64
 * EMB_DIM         = 80
 * ENC_DIM         = 256
 * DEC_DIM         = ENC_DIM*2

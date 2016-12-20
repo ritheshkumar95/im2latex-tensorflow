@@ -44,12 +44,12 @@ loss = tf.reshape(tf.nn.sparse_softmax_cross_entropy_with_logits(
 mask_mult = tf.to_float(mask[:,1:])
 loss = tf.reduce_sum(loss*mask_mult)/tf.reduce_sum(mask_mult)
 
-train_step = tf.train.AdamOptimizer(1e-2).minimize(loss)
+#train_step = tf.train.AdamOptimizer(1e-2).minimize(loss)
 
-# optimizer = tf.train.AdamOptimizer(1e-1)
-# gvs = optimizer.compute_gradients(loss)
-# capped_gvs = [(tf.clip_by_norm(grad, 5.), var) for grad, var in gvs]
-# train_step = optimizer.apply_gradients(capped_gvs)
+optimizer = tf.train.GradientDescentOptimizer(1e-1)
+gvs = optimizer.compute_gradients(loss)
+capped_gvs = [(tf.clip_by_norm(grad, 5.), var) for grad, var in gvs]
+train_step = optimizer.apply_gradients(capped_gvs)
 
 test_img = tf.placeholder(shape=(None,None,None,None),dtype=tf.float32)
 test_seqs = tf.placeholder(shape=(None,None),dtype=tf.int32)

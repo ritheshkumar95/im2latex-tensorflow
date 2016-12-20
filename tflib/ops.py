@@ -62,7 +62,7 @@ def Linear(
     activation='linear',
     bias=True,
     init=None,
-    weightnorm=True,
+    weightnorm=False,
     **kwargs
     ):
     with tf.name_scope(name) as scope:
@@ -119,7 +119,7 @@ def conv2d(
     init = 'GlorotUniform',
     pad = 'SAME',
     bias = True,
-    weightnorm = True,
+    weightnorm = False,
     batchnorm = False,
     **kwargs
     ):
@@ -428,13 +428,12 @@ def LSTMAttention(
 Attentional Decoder as proposed in HarvardNLp paper (https://arxiv.org/pdf/1609.04938v1.pdf)
 '''
 class im2latexAttentionCell(tf.nn.rnn_cell.RNNCell):
-    def __init__(self, name, n_in, n_hid, L, D, ctx, ctx_proj, forget_bias=1.0):
+    def __init__(self, name, n_in, n_hid, L, D, ctx, forget_bias=1.0):
         self._n_in = n_in
         self._n_hid = n_hid
         self._name = name
         self._forget_bias = forget_bias
         self._ctx = ctx
-        self._ctx_proj = ctx_proj
         self._L = L
         self._D = D
 
@@ -450,13 +449,6 @@ class im2latexAttentionCell(tf.nn.rnn_cell.RNNCell):
 
         h_tm1, c_tm1, output_tm1 = tf.split(1,3,state)
 
-        # gates = tflib.ops.Linear(
-        #         self._name+'.Gates',
-        #         tf.concat(1, [_input, output_tm1, h_tm1]),
-        #         self._n_in + 2*self._n_hid,
-        #         4 * self._n_hid,
-        #         activation='sigmoid',
-        #     )
         gates = tflib.ops.Linear(
                 self._name+'.Gates',
                 tf.concat(1, [_input, output_tm1]),
@@ -472,14 +464,14 @@ class im2latexAttentionCell(tf.nn.rnn_cell.RNNCell):
         h_t = tf.nn.sigmoid(o_t)*tf.tanh(c_t)
 
 
-        # target_t = tf.expand_dims(tflib.ops.Linear(self._name+'.target_t',h_t,self._n_hid,self._n_hid,bias=False),2)
-        target_t = tf.expand_dims(h_t,2) # (B, HID, 1)
+        target_t = tf.expand_dims(tflib.ops.Linear(self._name+'.target_t',h_t,self._n_hid,self._n_hid,bias=False),2)
+        # target_t = tf.expand_dims(h_t,2) # (B, HID, 1)
         a_t = tf.nn.softmax(tf.batch_matmul(self._ctx,target_t)[:,:,0]) # (B, H*W, D) * (B, D, 1)
 
-        # a_t = tf.expand_dims(a_t,1) # (B, 1, H*W)
-        # z_t = tf.batch_matmul(a_t,self._ctx)[:,0]
-        a_t = tf.expand_dims(a_t,2)
-        z_t = tf.reduce_sum(a_t*self._ctx,1)
+        a_t = tf.expand_dims(a_t,1) # (B, 1, H*W)
+        z_t = tf.batch_matmul(a_t,self._ctx)[:,0]
+        # a_t = tf.expand_dims(a_t,2)
+        # z_t = tf.reduce_sum(a_t*self._ctx,1)
 
         output_t = tf.tanh(tflib.ops.Linear(
             self._name+'.output_t',
@@ -532,22 +524,13 @@ def im2latexAttention(
     V_cap = tf.scan(fn,tf.range(tf.shape(V)[1]), initializer=tf.placeholder(shape=(None,None,2*ENC_DIM),dtype=tf.float32))
 
     V_t = tf.reshape(tf.transpose(V_cap,[1,0,2,3]),[tf.shape(inputs)[0],-1,ENC_DIM*2]) # (B, L, ENC_DIM)
-    # ctx_proj = tflib.ops.Linear('Project.Context',V_t,ENC_DIM,1)[:,:,0] # (B, L, 1)
-    # ctx_proj = tflib.ops.Linear(
-    #     'Project.Context',
-    #     V_t,
-    #     2*ENC_DIM,
-    #     2*ENC_DIM,
-    #     bias=False
-    #     ) # (B, L, D)
-    ctx_proj = None
 
     h0_dec = tf.tile(tflib.param(
         name+'.Decoder.init.h0',
         np.zeros((1,3*DEC_DIM)).astype('float32')
     ),[batch_size,1])
 
-    cell = tflib.ops.im2latexAttentionCell(name+'.AttentionCell',input_dim,DEC_DIM,H*W,2*ENC_DIM,V_t,ctx_proj)
+    cell = tflib.ops.im2latexAttentionCell(name+'.AttentionCell',input_dim,DEC_DIM,H*W,2*ENC_DIM,V_t)
     seq_len = tf.tile(tf.expand_dims(tf.shape(inputs)[1],0),[batch_size])
     out = tf.nn.dynamic_rnn(cell, inputs, initial_state=h0_dec, sequence_length=seq_len, swap_memory=True)
 
