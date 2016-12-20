@@ -11803,18 +11803,20 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span>
 <span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span> <span class="k">as</span> <span class="n">Img</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">batch_size</span><span class="p">):</span>
     <span class="n">preds_chars</span> <span class="o">=</span> <span class="n">idx_to_chars</span><span class="p">(</span><span class="n">preds</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">:])</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;$&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-    <span class="k">print</span> <span class="s2">&quot;Original Image: </span><span class="si">%d</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s2">&quot;Original (Input) Image: </span><span class="si">%d</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">showarray</span><span class="p">(</span><span class="n">imgs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-    <span class="k">print</span> <span class="s2">&quot;Predicted (and rendered) Latex&quot;</span>
+    <span class="k">print</span> <span class="s2">&quot;Predicted Latex&quot;</span>
+    <span class="k">print</span> <span class="n">preds_chars</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;#END&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">print</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Rendering the predicted latex&quot;</span>
     <span class="n">displayPreds</span><span class="p">(</span><span class="n">preds_chars</span><span class="p">)</span>
-    <span class="k">print</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+    <span class="k">print</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
 </pre></div>
 
 </div>
@@ -11827,7 +11829,7 @@ div#notebook {
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Original Image: 1
+<pre>Original (Input) Image: 1
 </pre>
 </div>
 </div>
@@ -11836,38 +11838,30 @@ div#notebook {
 
 
 <div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAAyCAAAAACyzEAEAAAFBklEQVR4nMVYS2xVRRj+Zuac++iL
+0AaiiZHAwrhBI4LKwldTa7lSo1ASF0QDBKWpIGARECRBI7SGwEKNCxKILjBRNlKoIiAi0LowmCjG
+YCK6MLzbW2zh9pw5Zz4X99zSXvq400vqtztnHt///fPPP/+MIP4fOJb9h9opJozYyPFTDYWwdHWv
+HvyVTI6b2EpxqA4vdcyAqU6wdm1gu1Y5WCnW7nJ/12CqiVIMupMrx001FDaKKbpndd5FAwUAoXEn
+LqqllxS5IeNd3NxUVr0zcUN8tx8hjfnqXT32gFHAwuFzdaPx+fAeGmpvDm7QWIzOg2VC8IT7hVpi
+Mp6ItSaKUmxBTJU5mwJPrqfctl7xkQbXTAwxZObnFNLf1hj/SILi0L0lYRFRnSMmwTF3lldxAyYj
+lX9undAtMy0jczhiQggtxrA/wI7aKrgXO0+lMsu6q/FSqCKbybGNzocDABToLkmgq4qjc2ek8JO1
+tVi4eUtV4mhuhcfnbwcAeWnB31dX/N5cZ9TgEzd/RppSIHZw62N1fPTkW+XRjmAaADDZkl8QMPKH
+tqZPL1c3jHraUnTNOX03BQAK5I5mit4516lM+ZmyMdw1DPGQ2SMBQP7ZQ9F/zx+VFAykQmicHA3T
+k5SGUJaKHQAw8mIL1nzZVELqpd+rMNuSd9oadeihpBEQLgClBuxh5cFjLwbevFDBBoJAqA4sX8h9
+velJFOZCbMBlpaWDe2p3WcUuP2bCgT9KAjTiWe/B345v3KZdK2KQATuwicQG+iPk1dCQ9E3jaurb
+mliHXm5Hr23edgB469Cs06IMAHXLJZndJ06Qmh+5TwKg293eCaC9PVoKFaZSIdSxb5pL/WsJS7mA
+BJU+XZNQu9kEB3RmhBGCMIo7wzMXQUB6txc6BkfUc/A/aopp2GVuB4ASTzmyJ5YEILF48aBWBQCU
+S+paAweZuIGDVGpwu4EbzhWuVylsyxEHgBCB0/bhmph2YbDvZORqFc6vDxUQqo5fGoDA/SA1WbvI
+Cy7EEMcL7mu4+vKSRcYisB2IIN7clt7tVQoAQv/lRltbyaxe9G+BJgh4AoCUQ4ev2P36uaNTXZw9
+3DHPKoeQDIPPV72JK8PHpeH51gXJPgY3a/YzGKZD16ufJVcGPrumXrOJ7Fzp885UZodpfwBhtqmf
+regnu6oytyY2QyjUHmbYPvfmcHaNRhyYA0sxY+1IJZTP1eI6eWH6gCKjSZ3d9IZ9q2bilTbdM7tt
+WIeMBAkAQiW3LhIjnRAS9fwY2FFbqaMlFE5Pj5Pbucqtfa9COrplvk1sFVJlGlJuIhsbo8xmwmDD
+tOlvv5/J81BooTebuZDdIyMnnz4TECaXuY2qOf9T33SsTGS/NQAlaae3IMWBV13ipaddyCoMeAKd
+9NyRU3tBKKBeEyb2zE1V9m88+vY2Ypbp1WV2AvNRWKF4WQTts5IGAKh0R7Un96KpuNtTIcQS9dh3
+6v5kVEY7zvPlpr0sUQxtocTVHPCs0PFVu3598vgbcV1EOV/oZbO3Ym/XiaivI7aXfD37x9KiaFHY
+bdE3m1EW1RiG7CE/QVcxV8XCohqAcGSZiez0nngA/zTWVZjiJBd4/UlyRXm0poL37Xx680FnIlxt
+eF2uyyVM8sqf6aK8TDKXMseEMI9HzhHAlCkIbOv321AgsdpZj1s1fNEvL7B4brK7GY2NQu/WwR3m
+tX5EvWO4Y8/AtvgPmgZ/BErKH0UAAAAASUVORK5CYII=
 "
 >
 </div>
@@ -11876,7 +11870,10 @@ w5SQyYYpIZMNU0ImG6aETDZMCZls+A/TO/0FBIm6egAAAABJRU5ErkJggg==
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Predicted (and rendered) Latex
+<pre>Predicted Latex
+\tilde { q } \equiv \sqrt { \frac { \omega } { g } } \bar { q } , 
+
+Rendering the predicted latex
 </pre>
 </div>
 </div>
@@ -11885,7 +11882,7 @@ w5SQyYYpIZMNU0ImG6aETDZMCZls+A/TO/0FBIm6egAAAABJRU5ErkJggg==
 
 
 <div class="output_latex output_subarea ">
-$$D _ { \pm } : S _ { \pm } \otimes E - { } ^ { S } S _ { \mp } \otimes E \; , $$
+$$\tilde { q } \equiv \sqrt { \frac { \omega } { g } } \bar { q } , $$
 </div>
 
 </div>
@@ -11894,8 +11891,7 @@ $$D _ { \pm } : S _ { \pm } \otimes E - { } ^ { S } S _ { \mp } \otimes E \; , $
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>
 
-
-Original Image: 2
+Original (Input) Image: 2
 </pre>
 </div>
 </div>
@@ -11904,44 +11900,31 @@ Original Image: 2
 
 
 <div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
-oOGhkAcN/wEe+ms2LM0IdAAAAABJRU5ErkJggg==
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAAyCAAAAACyzEAEAAAFS0lEQVR4nO1WXWxUVRCee2+3DTUt
+XYRQBUqQRI1gLD8SS6xsW0JBFAVCMOgDPyk/QbChrdoKtAFRA0qiAonEECMGRFApFWubQjGa0OiT
+DyT+BGsiFGi56bb7e+85Zz4f7t3b3cVaDTH6sPN25ptzvpk5Z+aMBvpvRB8OwG15NPJmzTVRTLqR
+vFMjIoIkytJux4NhxY1YGT5fGm+ECJrP59P4bx0kks1wjTg5aBa32DsRs97SRmXL3TiJoIzZT+20
+s+XL8Zz6sf8gDpeHVwyeU8Zf2uhEREo7+QbpBx8fTFwsZy3M3qaMgZUDerT4jFIjMYFE03nyzDT9
+WN9xw1sqOt8kbrl2AMwxagIsehM2AECiI8dCHI0EYD2BGSnCDE5TRKiWLW8tcI76PRuLayiSfgYB
+YERzXwNEeamQDrGaVgXLRmOBADqoDTKFRQAizROFb64DylNIlNaw7bnZdyEZ9IjBwPVPurCbImBm
+MPp8X0FCInLphAmqdhPhngP09yPGqSoT6A8NaSxuoIgTcirobdOJCBo3PPZDe2C/nyE1TUk6ZCwg
+g43O5Q2XqgL6XSlXo6n64tm1UwaGLg0knnjomTMPFrV512xoj4zOHgJXnXZARZrXHwBWsYp7bgAB
+eoUVeoKwsZ1CEDhLHwEdlNuXdKOsYhVT+7qpzFI8pCo90kv5P1GtlxqGKGiBTAMZ6EkETYCNRvoe
+g/JtYx9CLyyb3MyonW1L7tfKIIXM80fYI4GNRvoOyNoOi933wri6FMqoRXsv2FUyIlQDOxWUaF68
+ZFHUOYzACOX5bbZRR72q+gHU0QA27EAYe+mAiiNobFWW834AxzimzuqtnPTgbFY3aQ/DeUFKMRhR
+rcmJ3wOZr+efAtU7ap2IjMg6zdZDB0vGWF+cDcan51B+q8imkLZSIxxQS/Tsq1dJc3ucEa7K0i/y
+Qs24phLdyqdpH9BGIsl6pDuk6xoRAaE0UGqHVi75zVfidkswIrQXNproW3y4cW5hfhdQS2FgGwGQ
+VAk577lnF9ldUE4Kd4EDgagIPLlqogkGFDp3oGKcxNIraPbvGd/VfQMM298CmQoOrtlaWLDUrU0C
+K1Exq8c8prUAW7YM/JzXCbT4LUYbfWr2zCoT8cB9COatfhE2wFJMX2OW0y7Mu1euniEkAAtVdITm
+mO/OjbfTx1g/Z1E3BFpzbHASWBpDaNIVc0O5nSAGs6woLKpohRVe8SuD1oPFne1s4Yy/aHKNRL/v
+ggj5qR0SgFQXK6cWZ3XE9U4Yu2ADkDg3NtCyeMLOGDaVQO6jSqksbJhpSU4CbcbRBoG3KAxONBAG
+TBMQiI4exCnq4LiqngmpEDaDAEy/hd/pVbdbMVTkHUJwAkJ3r93t1s8AABMSazcBm7IhlQrR3kRt
+OSAsbF6D+IwFQqV0LkBKfJk7v95/GpI5SO0QCoBgZS0srS8OTDnsMsuwWTKrNzhp87Lc4pPO21aA
+BIRA67ityyvHl91k1E0blE61uSCr6PyCbU8/mihCcgueAQvVdZ8fDDuWxx/ulU5RMuPo4YH47puO
+fwL7C0cV3R/qq+357ESiATO7H0nvS7+g+ahEB33tNXgHZMQm/9hw2WualNSTIuWX3VKExPuvp/8E
+CYmaYdP0okkRdy1jC46lfiyAxHvPe9kFkJX8NZdPVDB0IiJDrRPkYYp0UkZiBBo1iu4ggjKY0v96
+HcogJkM7PoZvmQPGVMLO1hKnaMONZTzsGEggopEGsRHmjzRimTWs3T8U/IljKiVBw0b8b8vwCc0Q
+Z4gzxBniDHGGOEOcIc4QZ4gzxP974j8AxZOj2AHZJiUAAAAASUVORK5CYII=
 "
 >
 </div>
@@ -11950,7 +11933,10 @@ oOGhkAcN/wEe+ms2LM0IdAAAAABJRU5ErkJggg==
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Predicted (and rendered) Latex
+<pre>Predicted Latex
+\partial _ { \beta } ( \partial _ { \alpha } ~ q _ { a } ~ \dot { x } _ { \alpha } ) ~ \dot { x } _ { \beta } 
+
+Rendering the predicted latex
 </pre>
 </div>
 </div>
@@ -11959,7 +11945,7 @@ oOGhkAcN/wEe+ms2LM0IdAAAAABJRU5ErkJggg==
 
 
 <div class="output_latex output_subarea ">
-$$T d s _ { \mathrm { m a t } } = d ( { \cal { H } } _ { \mathrm { \scriptsize { p h } } } ^ { 2 } v ) + { \hat { p } } { \hat { a } } { v } , $$
+$$\partial _ { \beta } ( \partial _ { \alpha } ~ q _ { a } ~ \dot { x } _ { \alpha } ) ~ \dot { x } _ { \beta } $$
 </div>
 
 </div>
@@ -11968,8 +11954,7 @@ $$T d s _ { \mathrm { m a t } } = d ( { \cal { H } } _ { \mathrm { \scriptsize {
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>
 
-
-Original Image: 3
+Original (Input) Image: 3
 </pre>
 </div>
 </div>
@@ -11978,47 +11963,33 @@ Original Image: 3
 
 
 <div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
+<img src="data:image/png;base64,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
 "
 >
 </div>
@@ -12027,7 +11998,10 @@ E5Fzn27GCV8ZIv8FnqlPzuxB7DAAAAAASUVORK5CYII=
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Predicted (and rendered) Latex
+<pre>Predicted Latex
+\Theta = \operatorname { l o g } \frac { 4 N } { { \cal M } L } 
+
+Rendering the predicted latex
 </pre>
 </div>
 </div>
@@ -12036,7 +12010,7 @@ E5Fzn27GCV8ZIv8FnqlPzuxB7DAAAAAASUVORK5CYII=
 
 
 <div class="output_latex output_subarea ">
-$$\delta { \cal L } _ { G S } = \frac { \kappa } { 2 } \partial _ { \mu } \left( \lambda \, \epsilon ^ { \mu \nu \rho } \partial _ { \nu } A _ { \rho } \right) . $$
+$$\Theta = \operatorname { l o g } \frac { 4 N } { { \cal M } L } $$
 </div>
 
 </div>
@@ -12045,8 +12019,7 @@ $$\delta { \cal L } _ { G S } = \frac { \kappa } { 2 } \partial _ { \mu } \left(
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>
 
-
-Original Image: 4
+Original (Input) Image: 4
 </pre>
 </div>
 </div>
@@ -12055,41 +12028,27 @@ Original Image: 4
 
 
 <div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
-k5OUPwAAAABJRU5ErkJggg==
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAAyCAAAAACyzEAEAAAEZ0lEQVR4nO1WXYhUZRh+vvOds83q
+bu2Oay7u4qYI1lVCIlKaoln4s6srKwTdZBf9IRr5H4qKUghmEUQEUhtFSbCGra66aVpageFVd0FF
+GILMzJld13Vmzvm+9+lizs7Mzu6YiGUX88KB7+99n/M87/fzKuLemPvvhB2hoyquUPecsYW+4yBW
+3FJqhPKjZmNFyneDsTjl/c5LrgUU63+uYwXoiLHVpzPtyhl/zThWGi70+nv3xot963xz/Le6fHti
+5SyTJBmYl0ER3oEZHsXz069RigOzN/+zWx5YGDZ7/TS3WDjqr2SoBKbX6yP2MhgZkP5YWqyItXmf
+yLOMVl5dwdnrPEGpLK1RqnBGiPScdNSjvtH+0rIUcsW1asf6BuOIchwqAKKUAIAaLXoEbHrWTOq+
+6UWhTVgwiVLqDvqlG3FwpGH4Njpy95WcDufc5R1wrYY/6ACAMzjsABQMj82xMNuSWKaTrJBkodk6
+vXntkBWSIlaSrUmxIqRwuG4qmcUm5kyQl37uHGMM+5e0TT8pxvDr5rpemoBz9xSyQZIuAIg+8VDT
+8lNfrDceAIYHrkXktF2+3Goy1/7XpfizWz4IPUBBwYM3olw2aD2ov489A601Faw+e+mCDmr6Vhzp
+SDxyJW4RO79uVaLe667ZKKXXpAMAYo8t4Bp+FToAQLctLIhtARjnwJl3Yp8dW0WHGPD9lJ80Sd/3
+fcLgQ7Otc0VTdgn0qX0KEByZPd/UDKyctzK1dn69aCyddUg+9ro/PdswOst5pVuvMLcYiXG1Fl5v
+rJ0xY0svLQ3Pz5jW2tKsm1taWx4eYo5vgOSkeTeGFgD9DCVdd0YyfAszp3ZuH6aQxpoJKz5/LCOW
+RkZLLer4Q01hzepzR141NaDK7rgZ/ZW2K9utA53evBWTAQcaCy8LMPDEDw3IXw+e8hsvpI5OHOh4
+vatvaTBh/8wlVuM6ztU2OoACdKhefPfM6ZhxRZdJLU5fV0zwQu1xpyaP5xVMA4CjH5w8GV/2wAJs
+iMfjTW5TPB6PKwA31ANqw1NP2obNq+s+8Wv99w8SQMxtneRk9mRAQLldzvaFgSvOxQRYIrWxH2Hd
+VbG/AIdTZhyxA26aeTXR7fXQlO9qw178uTiWs5Y3w33YzQ2zaSiSrO1O/b5wTtYKrYSd2BkERi5g
+W3Fjg5Tcvl2vXWTmvb37d/0olmRQNEtSOLxtWtvOZDHpqeZUYTu8OWVxOhRSmL6/8dcJ/WJIy5NP
+t3X1UIRCO/9wR62xARO7vy1ejhj/5I6xdJq0ReBZBWBhivl2wD2oX5QPLYyGxebmPc5D+Kk8IEgy
+DAJLhkEQ2vL5KHpIhiVJKLmrGUa4FEk14jvJczLRF/CVRxkmnbl/HMpIUBL+dhnf4uUqzATcsqio
+Zf6B4NXnQjHsbZiy0YSlXndYCFR43rMxlj/AxgUVkMmUFSP/Qc1FNbZIudvAY/hWnrlnVebtl1lV
+4CpwFbgKXAWuAleBq8BV4CpwFfh/B/w3QHW3tzueAswAAAAASUVORK5CYII=
 "
 >
 </div>
@@ -12098,7 +12057,10 @@ k5OUPwAAAABJRU5ErkJggg==
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Predicted (and rendered) Latex
+<pre>Predicted Latex
+\Lambda = e + \theta \sqrt { e } \, \chi . 
+
+Rendering the predicted latex
 </pre>
 </div>
 </div>
@@ -12107,7 +12069,7 @@ k5OUPwAAAABJRU5ErkJggg==
 
 
 <div class="output_latex output_subarea ">
-$$w = 2 \operatorname { s i n } ( \varphi / 2 ) ( \partial _ { z } + \partial _ { \bar { z } } ) $$
+$$\Lambda = e + \theta \sqrt { e } \, \chi . $$
 </div>
 
 </div>
@@ -12116,8 +12078,7 @@ $$w = 2 \operatorname { s i n } ( \varphi / 2 ) ( \partial _ { z } + \partial _ 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>
 
-
-Original Image: 5
+Original (Input) Image: 5
 </pre>
 </div>
 </div>
@@ -12126,38 +12087,36 @@ Original Image: 5
 
 
 <div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
-5XsPAAAAAElFTkSuQmCC
+<img src="data:image/png;base64,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
+RU5ErkJggg==
 "
 >
 </div>
@@ -12166,7 +12125,10 @@ Pf/dQyWUGlZ5LL7roPKY/xblfYKK2Xw/CamIJSGLDUtCFhuWhCw2LAlZbFgSstjwgRHyfzmP6KcG
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Predicted (and rendered) Latex
+<pre>Predicted Latex
+\Omega = \left( \begin{array} { c c } { 0 } &amp; { \ I } \\ { \Gamma } &amp; { 0 } \\ \end{array} \right) . 
+
+Rendering the predicted latex
 </pre>
 </div>
 </div>
@@ -12175,7 +12137,7 @@ Pf/dQyWUGlZ5LL7roPKY/xblfYKK2Xw/CamIJSGLDUtCFhuWhCw2LAlZbFgSstjwgRHyfzmP6KcG
 
 
 <div class="output_latex output_subarea ">
-$$V _ { r * \rightarrow \infty } \simeq 2 \operatorname { e x p } ( - 2 \sqrt { 2 } r ^ { * } ) . $$
+$$\Omega = \left( \begin{array} { c c } { 0 } & { \ I } \\ { \Gamma } & { 0 } \\ \end{array} \right) . $$
 </div>
 
 </div>
@@ -12184,8 +12146,7 @@ $$V _ { r * \rightarrow \infty } \simeq 2 \operatorname { e x p } ( - 2 \sqrt { 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>
 
-
-Original Image: 6
+Original (Input) Image: 6
 </pre>
 </div>
 </div>
@@ -12194,44 +12155,31 @@ Original Image: 6
 
 
 <div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAAyCAAAAACyzEAEAAAFUklEQVR4nO1YXWxURRQ+s3O37W63
+v4I2YqI28SfxAUSoJoCKBcVCIcHIj4nRNDG+8ICljSA0/UEfgOiDPw/GB3wQQiJSKNSqoVYJDYoh
+MZooUcKLQGLapbvd7XZ778z5fLjb3bvt3nZAkJhwkn242e/ON9+ZM9+cuQJ0a8K6OcPm5Ij/lJgD
+s0LEzUl1wiEiaLIoFCqMMFQMJWcXMRk6cGpjsSZdPJdiydZmVZDDTLGWxqxEpOWjT7YrWfZXF3XU
+kI9iMx0y2jlA2pQ30H++q/rOO75+oqpi4ZmQ32swiIl3a6kFtgkUgMKCbUjzcOQQ8MgWv9eM1liu
+33h/qaFe0oH+CwMQ3N600bEuF/nBjIgD9ynHNNFEomVTpV2U/ubcWOmJ2Cr4LKbZGsM2ATlMRFqe
+/nkTER16+ZfIghcPrmSfujTbTsLPfzzBgSAREek36uo10dlq7LR/j8OP2Ki4GCnaNWtxxTvPQDGi
+9C07Orn+AoAtixzlg75RxApfRGjphLLR8hgUIzkvrpMTe2gMXPiFbKoxUzahiWdzGnx8uDtVGYh9
+2AOwPPJKqSoK9tUV+XlPtrgE/EcWIhKsFP7l4DBJeuGlp8VHJN5+eCVbmn4ckjJ44rt9/i9llOvE
+DHm0L+6nhb8NebM2PYGOM1RRnkyWnGTFOvWsdT66n9ZB+40ZyKRybPGV8XG/yXHvxY5VvX96TlnP
+MQty2vpJk4U5LaMH3n+wniUF9IXDOxf+8dVR5b+AmflfChLtM3ZFcCIrmTFG22EDzNGqULCfFRQO
+tMKJZvPCAE9NEQGAwtFw9962mF8FwnFs28lljRF9KOoZNeVO2MZuWg4F2GjaqmxkthIDCu5vCrHW
+ifDnORI7G34LxIjWTBIzEMtIY0TvHmAFOPjgPHRuYiPAlXgBxRrL3kTasf30ciayj5qH7xlmzQyw
+TqyoWJfWGUgyA05zNvTohjl9a1fXHsnXbBFp+eXZo7rILQM4e/7ONAdSNzRoSdP6NUGCghR0bVQF
+O6ilTRVnbKA0Ay7OorVsrX7n+YMbtq1PlXi9wiLiwKFXq53MPod176UAu7Ws3RMJIxlsKEQEEWOC
+iKlhRURVQtC87a+FPaCpESyrmf/p8s1UJfK7HQGI8eptu1XQr+pFcnFCgMhSzc3K0vL7JsXQQ3Ol
+QNlPEZCO1rR1IVmXKNRFWaq5WUuxq0vv3JsKTVFMlA4LbQmXJr0jlflL6jWNWgoqHZxUTBZJeuoc
+E8WWDFa6mXWCB2lrMhwZpMIR0rJPPk7qk7L8E90iIoQHdpRke2E5qV0G3PSL6vwUVBKRZc0pd5+k
+c+S5yPzB6nyQJ2x5mtbQryPtEScvq4DNnVR/cgbLZM0AeHJz5Vc1xmj3ii1s56rYBeeexxros2ht
+/bjO2zUEsE6sIwofZ7fc7Wn7mIFLl+Mef/buY4W+imfGtOe/fDBD0bLGeW+pKe5ELtbeuySY9DEu
+1uNLNzeF1+ZGz3OunIEUBCv0B85iaNqxQgCgdQ86adyH2EbrIoVj1O6xco9XQ3kHnQa2U69TlOEU
+9mp7xarabi7cpTAStDrNHKlM+KVkBrCD9+6qeGB02hnhEnMBL82NpdMNJaMcjYi4h8LHXguAUyPx
+kQLoXM/l15WBgYTW6eCSCV/IdYAniafnIi9sNNJp/7nNCOaCYxt1mZhAD/Wa8pqBjYhtdNMxRGdO
+yjWCTYgVjpf/APZu3X8PNrjCaHmqsW6gJ33V5J5lDjbQMNFQHiKiDjg3EGzyKYKvFgtJZPkd2dcF
+vklffWYPo2uqOzmDq+o1gG+ZYvOvV7eJbxP/X4j/AWigy1XVyK48AAAAAElFTkSuQmCC
 "
 >
 </div>
@@ -12240,7 +12188,10 @@ uiPXGq47cq3hvxpPql0hAV2hAAAAAElFTkSuQmCC
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Predicted (and rendered) Latex
+<pre>Predicted Latex
+\zeta = \frac { 1 } { 2 } + i \frac { \sqrt { \beta } } { 2 } p 
+
+Rendering the predicted latex
 </pre>
 </div>
 </div>
@@ -12249,7 +12200,7 @@ uiPXGq47cq3hvxpPql0hAV2hAAAAAElFTkSuQmCC
 
 
 <div class="output_latex output_subarea ">
-$$H ^ { i } { E ^ { \alpha } } | \lambda \rangle = \left( \lambda ^ { i } + { \alpha ^ { ' } } ^ { i } \right) E ^ { \alpha } { } ^ { { } { \lambda } } { } _ { } { } ^ { { \alpha } } { } ^ { { } { \lambda } } { } _ { } { } ^ { { { \alpha } } } { } ^ { { { \alpha } } } { } _ { { } } { } ^ { { { \alpha } } } { } ^ { { { \alpha } } } { } _ { { } } { } ^ { { { \alpha } } } { } ^ { { { \alpha } } } { } _ { { } }$$
+$$\zeta = \frac { 1 } { 2 } + i \frac { \sqrt { \beta } } { 2 } p $$
 </div>
 
 </div>
@@ -12258,8 +12209,7 @@ $$H ^ { i } { E ^ { \alpha } } | \lambda \rangle = \left( \lambda ^ { i } + { \a
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>
 
-
-Original Image: 7
+Original (Input) Image: 7
 </pre>
 </div>
 </div>
@@ -12268,29 +12218,31 @@ Original Image: 7
 
 
 <div class="output_png output_subarea ">
-<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAAAoCAAAAACed+rAAAAE0klEQVR4nO2XW2xUVRSG/33OmdIW
-Ou2AVjMieCEBExJIMERjIxaIGoGoQUKiMcgTaUAxtNxKKa2gIAgYAkZfJCb6YESJ3IQmLfCiD8Ro
-jNF3JSSmtB07nds5e6/fh552bqdJO5A4Jf0fJjN77exv/Wvt7L1HEfeGnP8TPlxEdVfWUvdgR3h3
-SjN+cQAAELkr3MCOeABsCx6A0JhZTGBPaNpW8QIqvjRuK11zYwYVqJWCfQfsrBEvFR5vYgC0gzvu
-IQfgpcKIqAmuFMgeMeKFOo7frKECqNJtqBtqWJ045MRxoDKQQTXUWztzXHyq9L7q55YZOyj4/vGb
-lVSgMntmPhJ+0dils0mSFBmoRSddksJE8xLMv+SmGvDktgSFxRK2P/Deo2tiJihYNDf1LlroBkRM
-Xy066FLM0LKnzmKHZEpn+0Zc7ppXE+4TP6jr5yZMctWZMXLTvI6z/BtHitMT13OFNK4nnqtJUmc0
-Q+1BRkahLjvBn6ozlNLZw0ZEBiq612K/H0yY7TjFlaepPT+9rIZze7qWnjQ2DKdaJJPzxZAk2gKM
-ZKEut2zijqruGKVkNvzaNC/iVUT8lmh2Yc0zm5kOLoowgZ1egh+gsPlCd+fhttvkxe2Hb27f3EXj
-8fLW1i8rWgOMZKFpbnzj1uNrF9wSKZkNvzaVXcYsH22Jx/V4Pu2OzDS3+kaVJIVJq50JtlrJAiMm
-+dq6n5fWXeHFhahr2mRfFn5vb/t8pdURsAmz0LTpWfHy7rnnqUtnw6/NYnq8PtISEXkB672R3pnM
-69GHo9FoNBqdG/2InjCJNibYhoLFhDEsJNFMHnPOk9jKK+ggPewtNpIDpaFoDvr+SmM7ABiKnbpA
-mGeX93zS5oVAzeWZ+78+Ncs/4VTFV3H/mFacBoeAJUGHqULVycpd/apG2KtX66SqxkU0a+Wh+NrN
-gwos26sRC6WzLQBaOuc1Zuh5e3Cs1yHToZbBG9vwqdF+fowVZEKZAaL4tkaFOni1ktqyLcQdh4Ia
-FXJsEwDOg9qKDNECJsIm8xyRIu6sX4f7sx4nJEWefsmV3kgttQxvmPj86EO57dVuQ6Obll2hgvZq
-dmMnaR/8bahdJcyg2q3fQdx1ib1SsLXyoSMbT0+InScHEPta6ttvFGCsf3Hu7crbH/55xvHu2/Dx
-hdWiAChM/zFrvAoOJPRKixWSQ3uqvLz3kLG/wwH0G1zeEqayapiyV504dACXHKvwii6A+s21x89u
-rfrnrY3rJPteIHVmVbX/Q9VWd332GN70XF6bE4kcHesM1IMrF/++qDFZcLtqdkeWbNnQWLHg6quR
-dddORh48wnP1TU1hoIf5x34utK7aj2aOjp8dlx4VHpTRBBQB6Z9mD1dMBF5ielWs3kZMQjIwx69U
-zi5VAEBl9tXFOu3it1D/4XTL7O4Fle6M+LRUWGKznb79dvMXblN9wdw8qKmjAiB/hSfC7n/ij1mj
-q5b4x4oq+5mXXtEBEPxYvBP5bLF/2N9dMbq6A6D4cFT+4JiPW0Wt6BSHLWo4uXaUTQ1Ho3huLlTl
-jI2TDcTb91WZnNGx5pe5qPp/WZFbsclqBMjfyAGX2mQRTW7yk7ojuZrEHcnXlJFy05SRctOUkXLT
-lJFy05SRctOUkXLTlJFy03+KhlXf8rPIfwAAAABJRU5ErkJggg==
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAAyCAAAAACyzEAEAAAFI0lEQVR4nO1YW2xUVRRd55470047
+ndIpAWNBDPFPo4GAsUgVC2hTHglEQ/ghBD8IgTax6odSxAeo4CNKSPzRRD9I0EaknRblZQFpIvol
+iZ+CRtrYwqVM50Hv45zlx/Q9Qzt3mMSQuD8mmWTvs85eZ++1z7mC+G/MLM4yBIS/CKM4sEII+ONO
+FIFqClxzqyOgn6SLkDE5tKm1c/7aJH0lwbs2h60LutmO/XR8RBXljCsHzjkNgaSvmCJUdQBNO8rE
+O27EX9jdU01SX/2qbGvC8xNSlD727M5e9WDYX1kXJWOSXVhjKx/+RehjLTpEI0R1PB7xkfI4sNKG
+LASXSEa9G5HEfNlb4QN4/IxlQbAAhMHaakRc5Yu9kT4mcLwpBl0A8UKVf9u/Y9eyyLFy7aO4Mrsk
+7WfF4gvVJ2RhgjJwwK58OeovhiTp8JXHXHYZQ9SFVLSa8JuvmQBAs++b303vT12ggBr0ANNfsAkA
+XuCzDeFExecrS7QA4I2fdJ7Ui4Av0FFgytTlw3UXl/AHQwjk0u+i3I8mV54JAAZ/C9Y/fbbfEAKg
+e6B/pDGkamxUMiumKGYC0PK7TXPfwu6qUw1KguaCa4YGAGilAAAcLAZUKDQVWMlfBdKBUqejQUkY
+2LJlgoMERerJxF1Lq+m1tHgTDtEEaKb+OUgz0MMNkKAYfi09CqrWrlNSoLxnwgpeQQNNwwhNKh4T
+gGGcniWC2LV0tZIAIEdrVI6ot/CpDXkZ6fFksNm6UhvqUXca5XrcUh+mtPbGdMbROU1pklppTdqK
+dHUspicvLggn+FJq8b6lD7dER4aLO76tqX1MYc37e7ZnovNS0AEiL0ZzDiQK9IpwBEBChDGkywNb
+8aU7udlJld74F2/kp3ma1gKLPLWyIhNd+XYukdXq9vLN28rWJxm/L7ynbtZ5xebmKXdQUHNg7i2X
+dKaVae04juM4Lq2aAXbjyGBd+Hp6cF8I55l9Pg5fXeKxHW/QKivFEyc4zJ07cwBf/Vi5MwyHcTKs
+Gks9s4oJaSSpud+sH84C1kxgzbDW4crh+P19mvTcbGATAg80GTNIMo2bh+lR6kUbCIijc3SpWWcq
+cPv+c3ZJ1jHrQONZJziIuBaG3RueJZ3sJTPtND0slOzYEgcANKwHIOYo2W0vL3ECIoSoAUCrMd8A
+IFDSlSxjub0s4PY9tf2j2rZcM2R6ijPUaavkWN/Cvhf+SJM3aiwqm28aZ+hpb0g06dwPF4fr8BOv
+Pt/HGPYyF9V5mMCJ+t3PzTn9RUgbAoAw3Yt6BQyn5BA3CkMbPV8jo+4o3VdKAcAJxmJdy/WDbVCN
+5ifN0axRn8+8FYjW48fZstweEWwa8TPLbFuXdLa2r1BS4CGpJ4e4wePr2xtvee/vvW0M1+Z8VeVB
+Nemq75E4XpakolVj0eanxi8kj2Bv7ub3GIv8TPXIFUQsJzGvwuKOgqgGjfalYde8XZ75a9ptXDhw
+6BJOrc6MDHpjrgEASl5Y93h3x3B/Zf2mKOS11mgOZvNJWDOF97SDd2lnMt4cqKqZt6SNd3gRe3Zj
+JARgD09WbW9atCrt5BKQvIDTBy0mP7BGqPb6EnHLIvWdRFZdH0qk02lX02rZ+bqXS7l8DniKm49e
+Hh0Maua3R6aY6QV24fDkIZHvVPekgCdHJYoAIKbBzaQjRi6+AjC8KR75Apujvp4CZ778jTmMXnxT
+4QKBxwOOVvn/cCKxbeEUqGJ85yrIfG+eamafHJb1Dr13Mv4f+J4D/hcPyFaSkmQFCAAAAABJRU5E
+rkJggg==
 "
 >
 </div>
@@ -12299,7 +12251,10 @@ lJFy05SRctOUkXLTlJFy03+KhlXf8rPIfwAAAABJRU5ErkJggg==
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Predicted (and rendered) Latex
+<pre>Predicted Latex
+\beta = \frac { 3 } { \pi | { \cal D } - 2 5 | } 
+
+Rendering the predicted latex
 </pre>
 </div>
 </div>
@@ -12308,7 +12263,7 @@ lJFy05SRctOUkXLTlJFy03+KhlXf8rPIfwAAAABJRU5ErkJggg==
 
 
 <div class="output_latex output_subarea ">
-$$\Delta X = 0 \quad \mathrm { a n d } \quad \bar { \Delta } ^ { a } X = 0 , $$
+$$\beta = \frac { 3 } { \pi | { \cal D } - 2 5 | } $$
 </div>
 
 </div>
@@ -12317,8 +12272,7 @@ $$\Delta X = 0 \quad \mathrm { a n d } \quad \bar { \Delta } ^ { a } X = 0 , $$
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>
 
-
-Original Image: 8
+Original (Input) Image: 8
 </pre>
 </div>
 </div>
@@ -12327,48 +12281,29 @@ Original Image: 8
 
 
 <div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAAyCAAAAACyzEAEAAAE1klEQVR4nO1XW2xUVRRd+55722kH
+KFBFDFGiGG3EhAgJYsSoAQlgC3/woTQhfPhCjSlCIECLgooSCHz4IR8qGhNtfMBoeaRiJEajhESN
+yo8mUoFY40w7nc6j956ztx8zU4ba+zIYf9gfk7m5+5511n6ssw8J/h+zInlF2F1cAlGABaRDXAwI
+5koDCyFjBxMyChmoWKTDgUXkgdkvUTDuiQfnth4TjoMsIcYe372wDynRvi7afIFDA8+hwBy22iUL
+BdayeI5oq0PcAJf5h0R6Jg5JDOCwUBv1Ve86GZQJQS7dvAZI5Zw4SbZDEoHiRrWWmsXz92E69fwn
+Z+Z8lKpnFQM5OCAsGnee/eU9tcs31CyDM/+cAdwjJnqgRUIYszqZuO0oeuixgNhk5iV+do6v7r9O
+Ams/FmNXOlAQaUsUfQvHlWeeEi1S1xVQf7EZA0mwO5TaVu85Pg4kzh1g5Nw4dCMw3oK0dCHrS5hl
+oIXdgnQ5g3G6qdrH/nHcATmGw/7ywZJ2joqksD1WpMMEhKX/pva6rQFcXOm8ZfWTHdO25uPoVhWY
+c/4fpdcfE89/AY83fJh+/O1cHNAqMMtAS5pZRMqbZq7+qy7u/z3L4I1D5Q3EA7YBCLkZhwAhAowC
+QUDgipqKtgJLP3u7ZdgK9hnHbECY9qdzXqKR0KdmKEjWmoSMM7HaLpf1kb6kx8oCQEi+nGS/Vgsw
+ErC37nDhBv1sx+CjU/O/bVs0vODiffI9v9ZmFICqSCu/40TIo8pu4uCTACOZvXsuJFTTtjcPLr3r
+dK7hfEvxrdYdBwoJjNUE8Xb3V1CUWb7cxDkUxpgNwLq+EdNsD0lXMktOkzW9tKUdUwASodLWUg2M
+2DPPW+U5g40BMOoAAImdiehqbQOAMEZsh59oeeXXgQkanthM445uFtrbax79CEuE89EGACLYQ9/d
+u6/r6Q927WOX4BEAAxASe2pghEqbC9Un09pm1GUOQCU3FCEF5ZIxdv0fp+jFFfunXqvcdxvtKUR1
+dnno8LxisVj0vMogp5xRq6zuXbIKX+S+ROjcV26/pD7V3Qg321/s0R03/67fWdncpw+1NlkEp6ZW
+x/JTwDilzGbl58ONYdkmAYSG9+1ZfHDSyZ3n5q/6qXd734XirFu/NiPLFoglMJ2TL1yz2apEsWYE
+8mswxsc/bnZCy6yiYFkRFkn/Q9mMLJn7w3osC55rON4BITJ6SHgiLJpFtGatXVcbz/WMiJaUUxDp
+RG/AXM2eiJgaedcRDshyuMgWEBQJlCKlHEdZtmNbAOOMt1u0oz7zLxchO5/JWaDR4KoIElbVdqr5
+vez1Jixku8E0++eKzAsHJrqvt+XshnC8mu/CbaSwyBrwyyLr7EPoTm+Au3NT0Pk51sLvTm5eOvGp
+9kuxK3vRK5LDq2vOxhm6whm7cgQp/9d65P5JojnXMGdVKc5EH+HSlkJKjhz16SeWPDa4JZOfUD8c
+6yoRNjgYdWLF+635bneprhvfgzDdEcoOdyZLiStXXIbPAXUAjvv0MRtv0eyLf70xCxvX9sXJcRhj
+Or+DikqSS3zOQIJ9fMsCeuSbbx+eN41jXCYo4p02UHoHMRnINgU7xQXm8kQQoEVibGgVesWPCxzF
+BBQSk/8I+N9YzABdBb4KfBXY3/4GY7dcIzGxp3IAAAAASUVORK5CYII=
 "
 >
 </div>
@@ -12377,7 +12312,10 @@ h4pjDIIApI5vK9KPGvx95Lsex2HDS2rHvh/Fv+oeu/gPYSqOs6TI7s4AAAAASUVORK5CYII=
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Predicted (and rendered) Latex
+<pre>Predicted Latex
+\operatorname { t a n } \frac { \theta } { 2 } = \frac { \beta } { \alpha } \ . 
+
+Rendering the predicted latex
 </pre>
 </div>
 </div>
@@ -12386,7 +12324,7 @@ h4pjDIIApI5vK9KPGvx95Lsex2HDS2rHvh/Fv+oeu/gPYSqOs6TI7s4AAAAASUVORK5CYII=
 
 
 <div class="output_latex output_subarea ">
-$$\int e ^ { \int \sqrt { g } ^ { \dagger } d ( x ) d ^ { N } x } \mu [ g _ { \mu \nu } ] { \cal D } [ p _ { \mu \nu } ] $$
+$$\operatorname { t a n } \frac { \theta } { 2 } = \frac { \beta } { \alpha } \ . $$
 </div>
 
 </div>
@@ -12395,8 +12333,7 @@ $$\int e ^ { \int \sqrt { g } ^ { \dagger } d ( x ) d ^ { N } x } \mu [ g _ { \m
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>
 
-
-Original Image: 9
+Original (Input) Image: 9
 </pre>
 </div>
 </div>
@@ -12405,45 +12342,37 @@ Original Image: 9
 
 
 <div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
-aMhyUtMAAAAASUVORK5CYII=
+<img src="data:image/png;base64,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
 "
 >
 </div>
@@ -12452,7 +12381,10 @@ aMhyUtMAAAAASUVORK5CYII=
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Predicted (and rendered) Latex
+<pre>Predicted Latex
+\frac { g _ { S N M } ^ { 2 } \Sigma _ { i } ^ { 2 } } { \Sigma _ { 1 } \Sigma _ { 2 } \Sigma _ { 3 } \Sigma _ { 4 } } . 
+
+Rendering the predicted latex
 </pre>
 </div>
 </div>
@@ -12461,7 +12393,7 @@ aMhyUtMAAAAASUVORK5CYII=
 
 
 <div class="output_latex output_subarea ">
-$$\tilde { \delta } _ { \epsilon } A _ { \mu } ^ { a } = ( \overline { { D } } _ { \mu } ) _ { ~ b } ^ { a } \epsilon ^ { b } , ~ \tilde { \delta } _ { \epsilon } \varphi ^ { A } = \underline { { g } } $$
+$$\frac { g _ { S N M } ^ { 2 } \Sigma _ { i } ^ { 2 } } { \Sigma _ { 1 } \Sigma _ { 2 } \Sigma _ { 3 } \Sigma _ { 4 } } . $$
 </div>
 
 </div>
@@ -12470,8 +12402,7 @@ $$\tilde { \delta } _ { \epsilon } A _ { \mu } ^ { a } = ( \overline { { D } } _
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>
 
-
-Original Image: 10
+Original (Input) Image: 10
 </pre>
 </div>
 </div>
@@ -12480,29 +12411,31 @@ Original Image: 10
 
 
 <div class="output_png output_subarea ">
-<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAAAoCAAAAACed+rAAAAEvUlEQVR4nO2XbWhTVxzGn3PvTfNC
-jTpb3OYbKmywicocTlzFrOtw1jqdOD8MGezL8GUMB6svm0WnY28wcaBjMj+M4dBPah2VibXtaK2g
-qGwwQRQVpxulxtimSZN7zznPPiS2TXoz062UrOT5cpPwnPO7z/n/c+49ghgdsvo+ERAjSR5mnhh1
-FWEEPv8IlmS4eemKUERfiEVvBTlCUYafZ6Qugv7m8ll+DTCvXmPGZegaKq/PltOdCkIprIkXQx6p
-IQT46BtMLaT+t+s5ZB6EGAh2kQUAFFa45JK5EDBxH4+J7ILLfpCZSh4tFQCMqMc31Az58FyAtgwA
-FOgO5pyU1JRbJz87B5JsrJgyeVmP80DTsR2H7tLseCaibcnW0s9o/4Mx53gXnnJsx3Gk+wiH733I
-hJTJ18bHaNuO49g6y2IB1L2v37gcnbEkWXK6etEle9Lnuxe3jBvwgHG+6EjvCaaqrlamNHYtHqs9
-4MxYN4SVa4lyLp0rzzByA2nerW+nF9KacYLwuM5qAdLzXeP5sjJjXsCuCTUDH+x7qmJs/GDEW/pO
-CQDQmnbH0AAArRRAT+/pVmF/u877xLokkt/0GfOUK0+db4LPuFexVBuDgJCeAzVP6lNYIrbXS7n/
-gd+jInW+rIYkZTIUTKoGs4GnsJdRXed//jjlTay5kXCts+ShWuq76KT+9ArVQ6PMLnYuufJ6Ixtx
-+dqhwG3tMo2Kr7yp1ZrVVFc/0fom1ly/MmejdjKIFmgmWzYL45x6WTWKtdojAr3VKxK+W94N0xUA
-UCS2xdOpTVWzXGmzKSCt76uC7D64HkbaqM08C+LKc0pKri6di7vxa1OUkQ00jFhbEGg7LK19PoFb
-3vdnovyiYkZTp76UenB2yR/nx3ECvOi0digDjcnFfbUzH7alaZgAEHCsrsOPl6Bm1dh4IGXURtvs
-/B9vg3imwcb1N359c3mlNjkYaHg94tg9ZdUf+V0bZ5ITb29obbLQ9nT5ACK1dGa9HX4RB2q3XsCP
-4evVZWVfb2csFEpIunaLzV2oNeZj2Uvo0jIRCiUkHd2CV5Mqn85y49WRDYGdXxmb2OuC1LrHs7Rq
-zFzUYivtROWiPctwh2zFFtp9JpBSn6uetPunslVh/lw1bfXxyApfg3KwTfJo2mn3S5FaRauxI/4l
-FpxRUmtskzy6mX/W+cPuwbPlwjupZR3Ij81EaopMIKU+Kea3/1aFXTGtNbZQGjvIzp1N7N+uU88R
-hskIKckwSUbJFrQzPu8I3TZ2TcZI9pCUbE4bqabnGWQwr5uaFVWya8HU8C/avaw9JBkjHTajVR7H
-Dxc6Mg0gSUU6ktSUTO0+dnvluL17Vo6n+61p0tEOKZV8aNT6rXe17WZ20SCeTO6x3jgbX/jc7E10
-nUSRSpGOlO2Vwf32MXPthE6d0cp9b79I/W8oAGjjvvR3GP6gL9dWRJEekzZ6rb827xsj8n73yuRR
-6NvlXd4J/Ah1fvcdI+2juC9996ZaZ+qXv6KNgYZhO1hJCyN1BgAyMwDIHST1cx531m/8TzkIQFDC
-euQkBASUNrKaZdQcdQfX6H+qYpBCUzFIoakYpNBUDFJoKgYpNBWDFJqKQQpNxSCFplET5G9Qt0jL
-enagMQAAAABJRU5ErkJggg==
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAAyCAAAAACyzEAEAAAFUklEQVR4nO1YXWxURRQ+s3O37W63
+v4I2YqI28SfxAUSoJoCKBcVCIcHIj4nRNDG+8ICljSA0/UEfgOiDPw/GB3wQQiJSKNSqoVYJDYoh
+MZooUcKLQGLapbvd7XZ778z5fLjb3bvt3nZAkJhwkn242e/ON9+ZM9+cuQJ0a8K6OcPm5Ij/lJgD
+s0LEzUl1wiEiaLIoFCqMMFQMJWcXMRk6cGpjsSZdPJdiydZmVZDDTLGWxqxEpOWjT7YrWfZXF3XU
+kI9iMx0y2jlA2pQ30H++q/rOO75+oqpi4ZmQ32swiIl3a6kFtgkUgMKCbUjzcOQQ8MgWv9eM1liu
+33h/qaFe0oH+CwMQ3N600bEuF/nBjIgD9ynHNNFEomVTpV2U/ubcWOmJ2Cr4LKbZGsM2ATlMRFqe
+/nkTER16+ZfIghcPrmSfujTbTsLPfzzBgSAREek36uo10dlq7LR/j8OP2Ki4GCnaNWtxxTvPQDGi
+9C07Orn+AoAtixzlg75RxApfRGjphLLR8hgUIzkvrpMTe2gMXPiFbKoxUzahiWdzGnx8uDtVGYh9
+2AOwPPJKqSoK9tUV+XlPtrgE/EcWIhKsFP7l4DBJeuGlp8VHJN5+eCVbmn4ckjJ44rt9/i9llOvE
+DHm0L+6nhb8NebM2PYGOM1RRnkyWnGTFOvWsdT66n9ZB+40ZyKRybPGV8XG/yXHvxY5VvX96TlnP
+MQty2vpJk4U5LaMH3n+wniUF9IXDOxf+8dVR5b+AmflfChLtM3ZFcCIrmTFG22EDzNGqULCfFRQO
+tMKJZvPCAE9NEQGAwtFw9962mF8FwnFs28lljRF9KOoZNeVO2MZuWg4F2GjaqmxkthIDCu5vCrHW
+ifDnORI7G34LxIjWTBIzEMtIY0TvHmAFOPjgPHRuYiPAlXgBxRrL3kTasf30ciayj5qH7xlmzQyw
+TqyoWJfWGUgyA05zNvTohjl9a1fXHsnXbBFp+eXZo7rILQM4e/7ONAdSNzRoSdP6NUGCghR0bVQF
+O6ilTRVnbKA0Ay7OorVsrX7n+YMbtq1PlXi9wiLiwKFXq53MPod176UAu7Ws3RMJIxlsKEQEEWOC
+iKlhRURVQtC87a+FPaCpESyrmf/p8s1UJfK7HQGI8eptu1XQr+pFcnFCgMhSzc3K0vL7JsXQQ3Ol
+QNlPEZCO1rR1IVmXKNRFWaq5WUuxq0vv3JsKTVFMlA4LbQmXJr0jlflL6jWNWgoqHZxUTBZJeuoc
+E8WWDFa6mXWCB2lrMhwZpMIR0rJPPk7qk7L8E90iIoQHdpRke2E5qV0G3PSL6vwUVBKRZc0pd5+k
+c+S5yPzB6nyQJ2x5mtbQryPtEScvq4DNnVR/cgbLZM0AeHJz5Vc1xmj3ii1s56rYBeeexxros2ht
+/bjO2zUEsE6sIwofZ7fc7Wn7mIFLl+Mef/buY4W+imfGtOe/fDBD0bLGeW+pKe5ELtbeuySY9DEu
+1uNLNzeF1+ZGz3OunIEUBCv0B85iaNqxQgCgdQ86adyH2EbrIoVj1O6xco9XQ3kHnQa2U69TlOEU
+9mp7xarabi7cpTAStDrNHKlM+KVkBrCD9+6qeGB02hnhEnMBL82NpdMNJaMcjYi4h8LHXguAUyPx
+kQLoXM/l15WBgYTW6eCSCV/IdYAniafnIi9sNNJp/7nNCOaCYxt1mZhAD/Wa8pqBjYhtdNMxRGdO
+yjWCTYgVjpf/APZu3X8PNrjCaHmqsW6gJ33V5J5lDjbQMNFQHiKiDjg3EGzyKYKvFgtJZPkd2dcF
+vklffWYPo2uqOzmDq+o1gG+ZYvOvV7eJbxP/X4j/AWigy1XVyK48AAAAAElFTkSuQmCC
 "
 >
 </div>
@@ -12511,7 +12444,10 @@ enagMQAAAABJRU5ErkJggg==
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Predicted (and rendered) Latex
+<pre>Predicted Latex
+\zeta = \frac { 1 } { 2 } + i \frac { \sqrt { \beta } } { 2 } p 
+
+Rendering the predicted latex
 </pre>
 </div>
 </div>
@@ -12520,7 +12456,7 @@ enagMQAAAABJRU5ErkJggg==
 
 
 <div class="output_latex output_subarea ">
-$$d \alpha _ { L } = \omega _ { L } , \qquad d \alpha _ { R } = \omega _ { R } . $$
+$$\zeta = \frac { 1 } { 2 } + i \frac { \sqrt { \beta } } { 2 } p $$
 </div>
 
 </div>
@@ -12529,8 +12465,7 @@ $$d \alpha _ { L } = \omega _ { L } , \qquad d \alpha _ { R } = \omega _ { R } .
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>
 
-
-Original Image: 11
+Original (Input) Image: 11
 </pre>
 </div>
 </div>
@@ -12539,34 +12474,31 @@ Original Image: 11
 
 
 <div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
-AAAASUVORK5CYII=
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAAyCAAAAACyzEAEAAAFP0lEQVR4nO1YWWyUVRg991/a6QaF
+BjAgqSHGSBQViKZGixYqlEEwYREf5MESJUCNSkuB0EJokC1KXCCaakxAnqRggWKJQAKKIRKXxMTl
+hYSIUOnemWln5v//e48PM7TTztoOxRfO0+Qu37nfued+984viP8HWroBOMKVp0lMCOEwJn2SFaVH
+TIEWryEAIaL6YjTdMWLSu3LNjBofEAhEdcZoGjJ55LC4earVjN1kZSWtIV1RTYNhpJMxkN2uysxb
+QF90V4ymSKQhNWmg+nrmdttN6DqA2yYL2UrXR4eYjhACZkFj3fkXgiBBCOkIAQkhFEbN1RRGTyeo
+nSn/dfzxDAAw0a0bPR7o6OxLIeoIiSnkppmPLJVNCwuOzr2oAQpdyx9uqps9dcWp0lmTz0KODjEZ
+KDt55YbYPKZ2ZedbeyQgsbWwcvHZH+sblqz+ZcoJqGQhRuZqx9x7rtl15PTxOXMAwNYh8FDZcyXn
+Rat5aoF9c2zyOjoiYpreD7PWY1mD22E4hoH1vrZFQl2zF6ie7qwkZSsJsRO/U++qqsaEQdMzPtFf
+Y6C+tDfnMNb5kiY0ZI+VHQIBB0Z8i2j6xAkT8NWxiBHKI13C9hXlBL8uNZ/yJdvlIcSaGYIAjOB7
+Mk4NELbr7fqW9kOvDgiq4P3gaYGDKIZ1acmuZwqS2XaQJFL/5kJeTwBi0tqCvn2rdz3/rzv2fAN1
+RpFY1VKAgaXJcbuy4CueL/OaV8055JiJeSEi/SfFmerfZxcp57OJf4x50fWzXvxF/MLXjXyo0LJs
+swIHgioL8GcRAt35sDIqcMBOwB7OmA40HbrlvvbmTwAKa+q3rNvWOm15XFrKfDh6vxxCQMtUGrIg
+AJkPitTuYyVMU1eg0XvU5Qv0KKUJfLq6sOhLKYBBV2c/k0EaA6EtH0AtXKB1QoSaEoEkJdur1jZS
+kgq1JG/pZoeif3qC61RFwlI7jig7uslJEAAkHZ4YV14xr0EF+a3++tVDbxSUnZOSjscOjZE3O/rR
+lyDWsGAAUr/80scVmPXdMjvjkixs7NS6M+dJHXpeSBPlVF3QQ+fVtDdUOgYAxx6sm1BROyqUMBJZ
+m3QCxShf737W7zj+0lyS3I93aZEqrCrp8Xo8Ho/H4/UESdJiTeL9C2NrgsePAer+H4pztIMPQGna
+uSrbgfaoGQSAcBKCPfrgoq9hLrSk94+mSkLeZX+oCBgAdLV4IwCfi9/r+UJkigt2boQkorfIGz7u
+Yal1lJSklDJ0AIx9rqgca8YaMjB9B7kWJLsascgr1YAqqiPKXNIahIBtxYIkSSXbFh5jlMENCJgf
+vcLMW/M2XL7YNG5PRvDzrtrteuQyxfhoGYdU0gQVUul/NT+5VA0tRYIARcdOVk5FZ/d4rZ3amMzc
+IfJE7HAs2aR2+HpNgjsUvWZGdCNJSpK0B8SN+JkCpHSwidbtohJjQGxXA9DowDAGMhvms0RzIw+g
+jDdNi2Wv0GAR2qKk75VYkPrRDpcfFEbQMpSGrGgbx4qb/v9jtL5z0iIMbHTdnz02O9ttJT3hwEhf
+mRFwzG0rJipBu9S/e0v1lRljZ6YYcjg2igGHp4v9Fmr5j5uXFvGxlG2Z9hcB//bVwRb4O3NOY/80
+XG+znVSnpgXF7vsenDIZ+ZPfVzcKmrsntTHFnNOVmvS1ejqMOn8797m4N5N3j5j0/oknrtr24+Xy
+ZkZDdFWOjbSPEyR/a9o5/xQCf7+s5UZX9XgQd+wDm7JcUIHsu0msFCEMQGm4/dK+O8RhUMS99EeX
+eHhI31z3iO8Rx8F/i93eRshaSsoAAAAASUVORK5CYII=
 "
 >
 </div>
@@ -12575,7 +12507,10 @@ AAAASUVORK5CYII=
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Predicted (and rendered) Latex
+<pre>Predicted Latex
+e B ^ { * } = \frac { e ^ { 2 } | m | } { 4 \pi } \; . 
+
+Rendering the predicted latex
 </pre>
 </div>
 </div>
@@ -12584,7 +12519,7 @@ AAAASUVORK5CYII=
 
 
 <div class="output_latex output_subarea ">
-$$\partial ^ { \mu } K _ { \mu } + [ C ^ { \mu } , K _ { \mu } ] = 0 \; . $$
+$$e B ^ { * } = \frac { e ^ { 2 } | m | } { 4 \pi } \; . $$
 </div>
 
 </div>
@@ -12593,8 +12528,7 @@ $$\partial ^ { \mu } K _ { \mu } + [ C ^ { \mu } , K _ { \mu } ] = 0 \; . $$
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>
 
-
-Original Image: 12
+Original (Input) Image: 12
 </pre>
 </div>
 </div>
@@ -12603,30 +12537,28 @@ Original Image: 12
 
 
 <div class="output_png output_subarea ">
-<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAAAoCAAAAACed+rAAAAE+UlEQVR4nO1XXWwUVRg9d+7MdDvd
-3XZpgSat8GCJ+CIaMWpiEMKPZSvU6IPxJ4JPSjBgUMGEtimhIDRWH0iIiQSNxhA1URFb/kwNIEaj
-Bp+NxjfS2mVpd7vb3Z177+fDzG63+9fBSLI2ex42d3LOfHPPvd9+97uMsDCg36a4JdaH3aZPudEX
-1o4Qy/4ANO/aZRWCAyitnpkBiJErYwRGLFQmLFX8XGV2Fro7FxtMd95jgKiUcJIzAJKDyqqE/t6Q
-pnRASJ3QHFcA0PCTv8SkCLL8xwiKe01IJ7WmGgEktHpIjpgw/ZXfiWq6H8TwzvM+gMFnZAkJ7o5S
-ycDM31xvrI8xvPucDwAaWliRDAAQq6vLeyognal5AZGi6cWbDw308UHK0I2wtaylP0UFEMIdyMz5
-x5YvMzedlzSCUHOoqdnqoUyhnIhGuzrutLpGiS5gaevSxa1NB0rJkjfGBoKHSgYgUpGJsxuWTJMq
-yRYARIqmLADYPJmhKy389HUNU+VeVsr24c+xTlhj9KazpXVnyXEpaHjYHSqVqcMf1zthXVf7HJk5
-UiyzaajtDqB31kh+DIrf1W7AP+nNiA4AytrdLB9cw4TdFzm0NWVKbW4tU9o5bCIOQPErhI/6T62I
-ntifWt2dMn/7sqfTdnJL8c8QVtwZfg983H9qRfTk/rQj691cLNPx8vbp1ZG8XMojGRqu8KGjxq38
-2WXgsPMQudz4SgQnltSTli8S5gdmZ4oD0LAilH5ImaAoRGcPsHbD67OlIZfOHmWAZfnE3EXLI1kL
-80lvNrJVa2bVGEvv3hN8H2b4L51/yBUAqGwUJbZ1vfRIug5gaP+d+fFLkjbiCEub6yavOfVXEGzY
-sG2Aa15lAMHOW68CErahvPpwjDSI4MXUvQfEwLScaLuW6nj0wgbJAS27LQbCL+wZXOtUzwAE60s+
-2akaiP1w6RjLmG4cAwEYuQrmUcbyMqci6cEIg36tHdh55PiAD/XHlsQbI99uVFxpVz+FuyIKDT+v
-691vMgAS2tZLW08mLFLqDd8zZAAg++g4k9plJJQhw2HJPctmUZGcHxogVO893ynFhUI9tx5QUrIg
-AIYOnr+z6+/mBIAY2zI8cnqwh9l86ketjgEA6R0FB7xHGYjgNmYlSJCrIJq/kyIS6W68ZtOg5kvc
-hH+CYi18X1Fl37aeSBGRErILn4sb979KCXqLh+YU6r17c2Xam4wUJZvZQRIlSRJ0kDUnSXmpvxqg
-zDVYq8cuqE1G4Inp45hJyHXQAJDtIiW+/uQMBANA/PFhvsO//NelAJK5fxGkbSfteNxO2rbyLgNF
-xzMUjyZKkkhG45QZjyqKhL/AfPWLSMmbXa0v6voWW0m7W1tlhQ4UuE3T089S2lmjUSsU9FlW+wSl
-6TACsdnlytCuXe5OepQpiq1sawq2tr1NdhFJNg21tQab2lZO0iX0lTn9c9ABhqZvzlzs37EIxLSv
-zo0+tXNRQXenYzucFkjDfeNEDEAABnalH/bnnzhT2YFHGYP/KnSQrJ+9F+VI6NixnTMIBLFm2oCB
-isi/j+SmX7H7LQvJR+Ch2FSUlSGVVko8B64RqZjbMEsFvbh85/WkrnMGgIRWdt63JCt3XuTY+W8l
-/+kNsbAF/zcyjzGKsGCuuvMn3/8ENSPVhpqRakPNSLWhZqTaUDNSbagZqTbUjFQbakaqDQvGyD+t
-EFARryQtSwAAAABJRU5ErkJggg==
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAAyCAAAAACyzEAEAAAEhElEQVR4nO2WbYiUVRTH//fe59l3
+X3ZWMWcMi4pG6HWxWDMVbdXKLCr60EelL2Ihq8Iu7oqbJaJJgUVQRIjB+lboZmq2mMYWCBoFRl+S
+6kvF6o7uruPszDz3nn8fZndmXJ/JDaEXmPPp8nD+53fvOeee5yri3zFdtL6ZPRRrOZ5AatSJ1gec
+hoIjlBkHSRXWeS0ARw9WGYBW0VOl9CNgOg+4FAHgcGPomC0UtAaiFC7pyRDNkkwA+VQrr3/D4sbm
+brzQZ451dh5D+ka4dN6joL0Aq9UnrQ8/sKZHO+U6dmwadq7kfkmKs5vqZ++/0PXkQmOPqv0fTTj9
+DgP+hWW5bh2zY7R+UvjFvMe6+n6bg69lcOH9P8zcvPsnSmgEkKTlMhwiySzaiTamp+G1XNjS4FWr
+ch5F2jbhUb1ASLqah9iJNLf5DZelNNjyCF5n1jp7VW11t6RIv9nZvIsULP8hI6tXS0bkGu1mXqys
+yDKQjGsFX15PbkMvbSiXGqDuf65+tTNGmfSdLwVDB/9oCWadgeRrWLD8hwqltapQCkXau1a6tzPd
+nvOU0lUa9d39ew9WDw2a8MvlAdbfm9k4OfChMOnbOn68pavxwJrFJtcVVANS8K5XAHgZsN4wLlkP
+3sQ9ee3ZCe6tSUuVBuBSKtM2/OhTLXu29EiJ7iZtZpE/kG8BIS2ZpA1sroSnbr81Fo1Go9FY9O4h
+ivBKPDYjFqupicVmxnbIvCLtCWywWVIkU68HyUHSki7IhlXZA83VL2s0AIg6F2tQzhira8UAogGD
+BecKSa+FAmq/AazXim3WY22yN6+dOv0k6owAos8m51Y6TrTKQLQOPbAGoKeABOhUyxXQkJ4K9Kft
+PVoAIDU2VyoSiUyNVFdHpkYaqlDQpkamAkV1BFsr4dEzoE50bnQh01hDBbUvpmpUYMXvwnRRUAr0
+5++8bcnnysHivfg98Xg8Ho/Pis9Ojo3g6graKOZLWmwg/vGTy+c6AwU49dW0GZ81ByHjm7Q8oR8n
+yd1TknS5wu5rItHKLMlUomBCUiiJRF9ixYpEXyJxpVhrOQdC8hCWW5urq800HuabSF0/RRQBZ449
+e28TflT7Irk5H5iOi1X2yHcNYfNW7MpTxiGNKnh27VoUtMLv24aa7JnzLe0mp6T6dVVT35klWwJ/
+bBhFAKIHtw9i4fMYdR+Y29F7fOm71gOu+eMpAJC+SgAGDkB1dbGWSjqGMHF9ZCQQAr8lFf3lwPnp
+IScgyVyCOZoP4c/LhNsrQhIUYsXakXUwqgtk/S6y8tWQ+evlWowW0GZkW9bfOUfhQrbUy+DaFBRr
+NS0Azxt19AaOvIFsJjROyBmy8srM/g/NYSkxZsdtwoTZ9fuDzUl3fepUSJ+r5B3PnF666AkJv/rj
+t8Bv75nCxk4/pMReiD/6Hnl/YDLc332KXGeKyY6nsxUIuxwhh7L44D6ZZG+eS2+wdxEqgtBHUEiq
+gWGpvcGLabzooTpTIlIo+J+w0P4Z18N4XFY60H/rxGVwGVwGl8FlcBlcBpfBZXAZ/P8E/wlsBiSu
+ZE3MAAAAAABJRU5ErkJggg==
 "
 >
 </div>
@@ -12635,7 +12567,10 @@ EFARryQtSwAAAABJRU5ErkJggg==
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Predicted (and rendered) Latex
+<pre>Predicted Latex
+{ C _ { ~ \beta } ^ { \alpha } } = \pm { C } { O } _ { \; \; \beta } ^ { \alpha } 
+
+Rendering the predicted latex
 </pre>
 </div>
 </div>
@@ -12644,7 +12579,7 @@ EFARryQtSwAAAABJRU5ErkJggg==
 
 
 <div class="output_latex output_subarea ">
-$$\mathrm { \Large ~ B } - \mathrm { \boldmath ~ Z ~ } \mathrm { \boldmath ~ T } + \mathrm { \boldmath ~ 1 ~ } \mathrm { \boldmath ~ 1 ~ } + \mathrm { \bf ~ 1 } + \mathrm { \bf ~ 1 } . $$
+$${ C _ { ~ \beta } ^ { \alpha } } = \pm { C } { O } _ { \; \; \beta } ^ { \alpha } $$
 </div>
 
 </div>
@@ -12653,8 +12588,7 @@ $$\mathrm { \Large ~ B } - \mathrm { \boldmath ~ Z ~ } \mathrm { \boldmath ~ T }
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>
 
-
-Original Image: 13
+Original (Input) Image: 13
 </pre>
 </div>
 </div>
@@ -12663,48 +12597,28 @@ Original Image: 13
 
 
 <div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
-QmCC
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAAyCAAAAACyzEAEAAAEh0lEQVR4nO1YXYhUZRh+vu+cMz+7
+uj+abM4gq10FQiBoV5lkuuiuF1kX0Q+EdKPkxaYWLWW/BhnbVkIQSAWRkEWprIE/q5kpZEVBYBFe
+CSFbOrvujjO7Z8753qeL2bM7O+45Z6JZg9jnbs8+873f8/4833eOIv4b2LOwJgGoOJKuf1xRSimJ
+Y6lZSHXhr+ZUQxyp7ooNDmUP3L3oKEwMkfWFSK6hn4Or9bBIJLHein31dnGRadssHyg/kljvwBr3
+ze+3TNHKxRDrPU4W1v6R9hzX3B+nqbpEtRUy4p+Ght+hiyZ6jenjJBowVpyqGJaBtbztNGM8pGqO
+h9zFcWHjWKReaZ1z7VT0GjpgAzBytOOpe0+aMNdhLSyKWp+94LzRAy86cmXlRu2PS6vsQmQJ41iG
+G/DiC7tX9LAUWeNyV4+52klDOelfnU0/hNkoRzSbVAzLWF+fXfgq0LorbmBIeuy7ramXJfK662Gd
+a2bSIszf2XRHnhLJonA4P1ooFm9EyiUJkiwVdyInhkKuXE3OnEORQXQbl9NYfmkSMeNTjXJzpZ1E
+i1ICbFx6tq8Qkmo1D4u0I6xkWc4kdEUOydhDTxGgcuc/3z26BONrvu8u7B9uhgKk4nRxAMBzXntl
+ON/YLKVJluDgeV3ubst0dsY7QAXKHXADhweavS/V+k1XEwMtogHomxyPefVA0y+9m01HwFLeJUE5
+sJZgvAKtMXcQRcBz3nxu/YGGxpdfmnws+vxBBEul9qSoqApLb+x/bMc7xfQ/0BUOGwB4NfGVnXMU
+xxPa1xYAhWX0gr1PZNC7tvtxSaUBD4C2AECuJBgoa2wEAIyNTfydjtkgKRxP7hL2YoTiFcO6sMTX
+cd0wub3CGIz7aGZJJpPJZDLtmV56pMe+bHs2m822Z9+i50c4kQ0AY26LMkfu0SPzenqLaSrAWEf7
+raC9UntTVOBQ0tGn3K7RqeuUShzIT4yAYhI2YGPrE4HiGdpkeqp9531sw+C3n390ad/DCwK/0Y4V
+/M4BQMd/b3taPm3oWHVyASMaZyrDos/d1RRKtQHFy4k0LiaXf/LhiYsPOaIBWOjsrKQpUVfHW5X3
+89bP1rb6webobTkzkRfH27Gz/DzoDLHOrtlwxA7dI2m8dc9IiZvb+i8/svFBcSfqN+VJJZI+BzLX
+yG/auq5XeKW5kptEdXcI/9ydzoXYIAlSKOMU8hqPH24/QT+sHQokORzmqDdDaJaFB9aAgkpCAQvd
+jt9HFg9ZIW7HBgDSgmlVq5QQwHg0vg/43NLV6oWlWpd/DgDU8lvX3tEwl1UEoKtuNGoKwSOxHGXZ
+NugMyh6Gn40Ve/Z5fMmh8FTXBsPD3Ty0590x0osqS9VJVGgM3WFtMPqLfUn/dh7MLaBCxNxNT4U0
+yr+84Ys10H1sP08Vm0VHHxTTE1Brx0Zk+qc8npX4paoExr5Px0GbFResVlWKu1bPwmsqz5htcG79
+FwHb+7EhUQOv3oGpS8eeToXaxhTq/baoYPc9qWpYdTa+gdSEWfjq49ek5f+keC7wXOC5wLcYfwPb
+dardpEZDVgAAAABJRU5ErkJggg==
 "
 >
 </div>
@@ -12713,7 +12627,10 @@ QmCC
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Predicted (and rendered) Latex
+<pre>Predicted Latex
+h _ { i } ^ { 2 } = h ^ { 2 } \equiv \frac { 2 } { r } , 
+
+Rendering the predicted latex
 </pre>
 </div>
 </div>
@@ -12722,7 +12639,7 @@ QmCC
 
 
 <div class="output_latex output_subarea ">
-$$S = \int d ^ { 2 } x \, G _ { a b } ( x ) \partial _ { \mu } \xi ^ { a } \partial ^ { \mu } \xi ^ { b } \, . $$
+$$h _ { i } ^ { 2 } = h ^ { 2 } \equiv \frac { 2 } { r } , $$
 </div>
 
 </div>
@@ -12731,8 +12648,7 @@ $$S = \int d ^ { 2 } x \, G _ { a b } ( x ) \partial _ { \mu } \xi ^ { a } \part
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>
 
-
-Original Image: 14
+Original (Input) Image: 14
 </pre>
 </div>
 </div>
@@ -12741,39 +12657,29 @@ Original Image: 14
 
 
 <div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAAyCAAAAACyzEAEAAAEy0lEQVR4nO2WW2xUVRSG17lMW2q5
+hoKRxBo0MT4oCZTEIqWBICAgmpDwRIw2KneZVC6GCgUSQgBjQsRE64OiPgDSKIxQNC0UUWvCm4nP
+Ei0NHWZaepk5M3uvvX4fhrl0zpmKLxqTWQ8zc/Z8e33r7H1m7bFA/03Y466A7MvE8YAcMlzgd1bB
+MCwiMnD/Nt8DcmITsVWCK7hjWDQ4SI5L8RJF/kOO7OHBhOu4UQlOkwkNMbEX5jxS37FvcacwANHI
+h+bcx4m4AgyMs3WPTtt/7vVXPQN/3BcLoHH01EB0T21zB0xmZFzkrifmcpci/Rt+j15ZsHBnwper
+QIyTCYgHJKEABiDgg8nsDNH7I8iXXYorwjQAPQYE3e99MaOThsCI76p7eOWeFATC3uIFaXNfzKa9
+etRkE5hS3HhMBJ3L5zyxKQKNgCAAUKZ5HitcDjXcHuiYv9xoUWiZC1OwvHsbs5Vzaa4QE+Y1dCbe
+ty10EQx/EABBurYL8qO7CgAMrQJLdPI1aIAVi1IiHK/oysxnBHCsGBBtTA6DwRrrMgC0UW+QmQAw
+umrTSD5Hmj01qo5QN3CsUkTyExR2PK1YAGE/l9/FHAbG97QXoyqVHK5p0KXE5plmI0zL4gCAuLtD
+UgvfYgWDC9t6sPNoAgpHyIMAAh+nDbp2dwmG3vM4iyGNg/blzBbsoqGA59olgnP31+M2bljPrm2o
+hjM8c/Znx+ybqxwx9lcfPfnyvLqTo0dAr304XEVE4vi4VOW3Gx47GZ36wYHNVVmMHPVD7S/HlzBZ
+sUn2J7s5VNw/XCIOtTesVBUXwL/1EhG9UTFKtuMS7Nibf9Z8zKeH55NN0++07+cQGcfHiXXxizvb
+iYarHcpicMauPt7f00NEszZKIrBlwtFnVsDQOuKj0WQieWfjvamWV7uZXMv5pkbJMtOxnhyCpImI
+HD9XSZvWvdNUnT61tVJlMctMWjrYFEmOjY12PmTXBIhdIqJ0DC4tmXw6RkQ06dZQuGrEJrJoRhNd
+txfZ1rhCfZxtFlwdeyk0kJ5WAErF+mtmLSyi+fukmQIOCkCje7qG4jb6CUmdQEvoGkboMBRSAyZM
+afTEIfDsw1BAEKfMbrsPJ2gIJoeJxO0meDoFj1argOZFgCA96xK08ZY/BQAROgDxKluRQNvMe+4i
+xKZFxaB/dj8EgPg4pfA2QZqmeMhjYEToPABpdFJBXdMlsrT7/JnVsKq+W7a0se7m1+/uFa7cECMi
+ir3Y0Lf9dnutEfpyZAYREVnk42xa+fnW/uvhCk05jByzNvJKV/2tXnQ6YvtXOtNALtXchYhBR7i1
+JZ4Zqb4nkmg7i8iW2wAY9c2iMrX6OaX/2BK2OsGFGBjxcGv4vP+gyzUQMBYeQpaHFoAxrwX5DBo3
+qLu48eU4OTTlUzTWg4swM+4tSKzkcL1mAKy0yuyQ6a4egVEsrARi9Nw9+cqKuCFcoN6G0M9GF2Oi
+tAo6IHJikf4pA+NXhHFuxUj22FGmud5TgSvGOLdiBCdOtA5BdGmshBgG1+NFX2hciedq8d5XwTuV
+4SSTYyLMF1bJ/2tFjyKsCTgmcqyJseLIio3tm1E4xE7phAXcRFgJ8b8eQT/tsrgsLovL4rK4LC6L
+y+KyuCz+n4r/ApLUGGtIlZKyAAAAAElFTkSuQmCC
 "
 >
 </div>
@@ -12782,7 +12688,10 @@ U45MNk05Mtk05chk05Qjk01Tjkw2/Rtm6ZgoaKUHTwAAAABJRU5ErkJggg==
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Predicted (and rendered) Latex
+<pre>Predicted Latex
+\langle \widetilde { \Theta } ( x ) \ \widetilde { \Theta } ( y ) \; \widetilde { \Theta } 
+
+Rendering the predicted latex
 </pre>
 </div>
 </div>
@@ -12791,7 +12700,7 @@ U45MNk05Mtk05chk05Qjk01Tjkw2/Rtm6ZgoaKUHTwAAAABJRU5ErkJggg==
 
 
 <div class="output_latex output_subarea ">
-$$M \{ B , G \} = M \{ B _ { 1 } , G _ { 1 } \} \, . $$
+$$\langle \widetilde { \Theta } ( x ) \ \widetilde { \Theta } ( y ) \; \widetilde { \Theta } $$
 </div>
 
 </div>
@@ -12800,8 +12709,7 @@ $$M \{ B , G \} = M \{ B _ { 1 } , G _ { 1 } \} \, . $$
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>
 
-
-Original Image: 15
+Original (Input) Image: 15
 </pre>
 </div>
 </div>
@@ -12810,32 +12718,30 @@ Original Image: 15
 
 
 <div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAAyCAAAAACyzEAEAAAFAElEQVR4nO2WXWxURRTH/3Pv3m27
+bYEC4SOgNQj4BCIJoaQBQwsIKClVEXhAEwyFpmArHyltFRGLfL+AaCImakLiZwulSC0fNjVFCMSP
+ByMJigZDgApLS8tud+femb8Pt1so7LZdSeDBPS93c3bO/OacM/+ZEcTDMSOKj+z+fWBgISLfeMjO
+/YKpEXB/BRAP2fPfwS6FRvZO2ICNXZNDus9kuTmIuFrDTtOSpKO1UvvHtzha2rZsH7WWkj2blrbj
+kEr+PrVN6V4G32mdYG2T9JOkdFKO03a9DV4/e56s819Frq9kRxxcdmV8rWxGZu5B5rfVD5GKTum2
+L+o0s8p6Tlm7A8nm1VMmfEsVB9gAAGq1ceyxgrOvfphTk171nKkCuY1jFzaA2S13NYTdJEYGchvH
+LjzOqifbzq2YfUyoOHvs8FkcJEmJNSwsIt8GT/nCZOFKN+No9dZSdrgDHYUKLtDGCoappdR9arUH
+gDKPfFOZZxuCtkhFOAO4thwH2DRhYEQiolV3rTTDVbk2LFjq+nIc4MlHR1YWjxE6D6Y2rD4m7AFo
+XH8+o0iZBo3QmAIM+T6cFJBXquYWHR0YUgCgzMaljisswfSzaRSANvxbAzkvtjtXquYUVd+oHZQ6
+bdZsbQj/O6LClyL6VGrJPaikpLJluEXxqnVZncjNK8usdfy+Wjqkpv9qc8T+0W5zajKWrpx+sGF6
+XlnmIdbO8S1aH9Y2a4YWLs8YcLMXLZAkSCecY7V2DVXO0+tI7bCdXDueTtQohz9gDzlxFcMO26h5
+cW6Q1GxDKWlMD/VB0R7QDHznM6DN0003vXLuZPPwmKw8mHaaPrCzUbvtPPk5Ihs2ZXMyBcKl+Hnl
+X74dthd2ulbG+5NSgimOZzvKbejsJGl44Hi0Mg3YZrTrwD1hjcFBUnB02uJfP36CTDt1wVS0HA+q
+p2kTgMAo2BEZOQBodpycmmrsfQwELRoGNpA+Wrfe6y/ME0Y2vAA8MAyAMTcbKfUq2AxLMnMwqWmT
+jqK0SYail0kziO0k2d7dG0C55CpotmwPyx08WtZEbqqN3i4PYIj5e+fVeYHPLpYrbcEDbQIWoMwk
+d23iyrtdGSdvSyaUZ9wFIPzUog22mxEhIJR33A2r+pM5wdTdb5W0lBbg09asxg3VMeVkqpzD+ZOy
+cC59lmlqLWrMeYetZ14fvDrpdM0miwIUfwpvRMgWAAFr9yImNc9cHbkMXf0Yu5aM+Kh9cqq+tMzc
+m9pvphxirpuSr8wYpSYVW8uLir4mb1HrEEr0C0vUEvg5KVM60fen5vWS4r/v9fvPH8ERBrzlLHjl
+g99GBL9Ek4ouDPcUVp2zkZqXh/nt5B3c4+MZnOrsj5K3jbcj7G6rUrq+gswSmi14ow4vLVuDGbnH
+Y90ckWtRSulQa0pWmgyN3ldfXNyWOSuGjDsjuhdD6wAGnStMOWRzi3fY7I0jf/nxzWrGnCHSIyvS
+KbaqS/ObG6bsG96wYKuOrsHbEXc6tK/+j7qUSwNtnn95W4ZYk4aJgI7eYNz9qqIIPB4csPhMxldb
+Ol4bGpPakykz9EhJhQ2LVEYsbBTw5fE/9RsAZQJwzL4c9ncyCXoE2JbshWDPwXe9DR1rvxpuSa9J
+RU+c70agMz/RH4goLKbd84DtsNMh2FtYz9ZLstHBD8qiPOgfFvi+inw/4AdkCXACnAAnwAlwApwA
+J8D/I/C/fxpg4wPO5Y0AAAAASUVORK5CYII=
 "
 >
 </div>
@@ -12844,7 +12750,10 @@ huFAhhqGAxlqGA5kqGE4kKGG4UCGGm6ZQP4Bi/UYIB0OB48AAAAASUVORK5CYII=
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Predicted (and rendered) Latex
+<pre>Predicted Latex
+G _ { \mu \nu } ^ { ( a ) } \equiv e ^ { a \phi } g _ { \mu \nu } 
+
+Rendering the predicted latex
 </pre>
 </div>
 </div>
@@ -12853,7 +12762,7 @@ huFAhhqGAxlqGA5kqGE4kKGG4UCGGm6ZQP4Bi/UYIB0OB48AAAAASUVORK5CYII=
 
 
 <div class="output_latex output_subarea ">
-$$\psi ^ { U } = U ^ { \dagger } \psi , \hspace { 0 . 5 c m } \psi ^ { \dagger } = \psi ^ { \dagger } U . $$
+$$G _ { \mu \nu } ^ { ( a ) } \equiv e ^ { a \phi } g _ { \mu \nu } $$
 </div>
 
 </div>
@@ -12862,8 +12771,7 @@ $$\psi ^ { U } = U ^ { \dagger } \psi , \hspace { 0 . 5 c m } \psi ^ { \dagger }
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>
 
-
-Original Image: 16
+Original (Input) Image: 16
 </pre>
 </div>
 </div>
@@ -12872,33 +12780,34 @@ Original Image: 16
 
 
 <div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
+<img src="data:image/png;base64,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
 "
 >
 </div>
@@ -12907,7 +12816,10 @@ hhtGiAw3jBAZbhghMtwwQmS44X9D5E8PTVcCznEtKQAAAABJRU5ErkJggg==
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Predicted (and rendered) Latex
+<pre>Predicted Latex
+K = \left( \begin{array} { c c } { \alpha } &amp; { \beta } \\ { \gamma } &amp; { \delta } \\ \end{array} \right) 
+
+Rendering the predicted latex
 </pre>
 </div>
 </div>
@@ -12916,7 +12828,7 @@ hhtGiAw3jBAZbhghMtwwQmS44X9D5E8PTVcCznEtKQAAAABJRU5ErkJggg==
 
 
 <div class="output_latex output_subarea ">
-$$A = \operatorname { l n } a \, , \qquad A ^ { \prime } = \pm g W \, , $$
+$$K = \left( \begin{array} { c c } { \alpha } & { \beta } \\ { \gamma } & { \delta } \\ \end{array} \right) $$
 </div>
 
 </div>
@@ -12925,1111 +12837,23 @@ $$A = \operatorname { l n } a \, , \qquad A ^ { \prime } = \pm g W \, , $$
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>
 
-
-Original Image: 17
 </pre>
 </div>
 </div>
 
-<div class="output_area"><div class="prompt"></div>
-
-
-<div class="output_png output_subarea ">
-<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAAAoCAAAAACed+rAAAAGgklEQVR4nO1YbWxUVRp+zr23M50C
-BYpGHZZ0desaDQR/KCAuuwvrtpaKBNyYsBE1Rg0NRqqUIpRSWpAGFxo3KybGRInx6w+oJdTSUB01
-QaPGH2qiQSQaKxHK0Gmn83XvOefZH3dmOsVh5nY3kMb0+TP3Tt73Ofd53/O+7z1XEL8NGJd5PXoJ
-3P8S3P9XyHjXFKK4jc7YeFKdIU7bOu6P5WGdXEhLewiFVgAAw6RAIlDcPl5qAIAX6iwytiUuhB6H
-L0Ar6mUxwyU3SfXnjkzMLgaFnhviIEADynvGLQCgSLZMYRioaKjw6uj67TrwfLUyizyZ2R2aNpQ0
-cFe1OP/RrcVINbr7DQDK/GRr+Zs+r1vEDSgRa2u3Nd6s6oPy6AkocbDtpS/yB02OfbTtIehkTS1e
-xfIiZckS45XFlhJE4qGF1T8anlNCktSkbwvJz7GFNgtB27bW6UsO4+lIB52CDiRT3G+Q5B1ILbmF
-sjC7o/vwASVtNoOdJ6mLsafhCpG6Gx121KG1KVeIHkX6H5XjauttfqfhybzK48/GRlnUyF/Loqlh
-tuMU+nRGyK/J0+z3z6Ok5qBvR6oyPE4hKW4zUqSsRi8dfXFfzXMbGgZi2r1Olmzh7NN5ltIcQMRR
-2TuNbdQ8glW7lo4JRR72DeGzlX1K0ubTYFO9Lrw/cuAWu5X4VJ8oK3/ww51/p5kuL4pITgubKQAo
-s+vR1fqP/LGcAkDC+X3NPdc4JaOFkdnQasqtK0M63QW0ecwcOOX/ck1N801PMVO8+ow/6xcIIMte
-pb69hgaAgSt6nv9BWF5LBG4oJP60d3c5fqIkTw+SmpQMXTtndjAYDAZnB28YpqbmMDaTxtKk0qTN
-1kDn0qjMn7/vprYynasUt6N9371oJMnMRlKpfwbnBIPBYDBYGdxLh1n2ZdLR1IyVNtUeKFhQeTKi
-zY/EPzZg7qo3ntDxNcYXc7ssARN/+SqbEjEFAtJ6Blsd6Nv9tgEBbSbfes+EoBTCBEBnz5nMfNW+
-m9qOPHsbDQCWc7ysBamzL+4oFTTTc074XoumjQX9sJBlX2zaFkBpPfP2SmlBEaaXFuwKMQ5xrRQr
-1HnT6jziHF6dLKcA4lrkNj+WjDw3XZh9xu3wAaBhW/+ypAWR3lu0qrJCIJJi2XUGAdCIHNvkJMrv
-DhkmMBSbUeY+/ZA5prPmsJsAjdJU7cqUHzABgEAxMRYAitjr5ZYp3hN+MfSIZX03wwAgrRf2ljjp
-mE37bBoBI7K11DisaxDt9N1yxzu7WhZqS1oj+3wLltGAgTVrsrwnX+u6y13dtg6YFWZp6kiJSsm+
-xrl9h/6mTIrYokxGSpwnN0ory34nKGlE78Yh2++YRs/H0x+d6iUlJDXjaGGcDdjPP8S4Fhvd2RAP
-j0KTlM68dTw4rXZEbq7qn3Vy/nWNHL6nXzZV9c84R01S2mkk4vMaGM9s3waQjKCMmzf6HuCN9bRJ
-6hzyOHPY45Ikd914ZZT7O/RAoKf+If5Se7BYuYBk/D/3Tl/1XFS/j8cWPx6LnT4Y6M3rJlXvVTsr
-sYNsReOKSKLPv37ly4qtaKwbUbk1rzmAM24XUDzeMfuKPceZuhP/nhrpev/czPb8MzfLLt/dvm94
-RNbNb15xhsTyulcZwvYig5ogqU79PHz6lFY82r7FaVlEGg2u269nVvhENw7z6Pq2m8viZM/6nymP
-rm+7uSx2wTSJdyYymsLfDw59HybtPdu6yc/mIOLOkjwDMXyiG906HOipf5hKNb5CJjqaNmE3OZIq
-LCMzEF0oknzq6rNvoSOffqWPNpOLhM37rue6BbaUJBNcez3XLbCVpwksh6O/LKmx8w3FDLsmsbzu
-de2Q1BxEKFH2jpex6M6RdFikY8vI2t/NbI3mG9c6hlnf1Ae6HBlafdVOm5rS1kplbsbCyXXUmqR2
-bBm9+m124sL0jWGXid1Nm7Cbtral1sk9lXXHqDy8qIgL3i4pOOifkrctaKP3ZKq/uQIUOF8x6pBz
-U6SvIDZj/+rqr4cCeZpplj0yM7Rw1hsrdPpwEJ6FYueEbNcaGxqSTqEAKFLlmqgi9jmQ6t35lUt6
-ZYH3LclMElw49DjdL8wIAF50+CiC7mGYuSYcx/n4PC6aviz7mCR4Jc8j5FJCGyi6U6TlcTONwWUW
-UiDdOTbj/AIC4PILuWS43B/oLhkmhUw0TAqZaJgUMtEwKWSiYVLIRMOkkImG34yQ/wKofh0OJNoX
-CAAAAABJRU5ErkJggg==
-"
->
-</div>
-
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Predicted (and rendered) Latex
-</pre>
-</div>
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-
-
-<div class="output_latex output_subarea ">
-$$R _ { 3 } = g _ { s } \ell _ { s } \rightarrow R _ { 3 } ^ { \prime } = g _ { s } ^ { \prime } \ell _ { s } . $$
-</div>
-
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-
-
-Original Image: 18
-</pre>
-</div>
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-
-
-<div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
-AElFTkSuQmCC
-"
->
-</div>
-
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Predicted (and rendered) Latex
-</pre>
-</div>
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-
-
-<div class="output_latex output_subarea ">
-$$\overline { { \psi } } ( x ) ( S ^ { \mu } \tilde { p } _ { \mu } + \mathrm { s } m ) = 0 . $$
-</div>
-
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-
-
-Original Image: 19
-</pre>
-</div>
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-
-
-<div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
-gg==
-"
->
-</div>
-
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Predicted (and rendered) Latex
-</pre>
-</div>
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-
-
-<div class="output_latex output_subarea ">
-$$\epsilon _ { 3 } ^ { \alpha } = - \epsilon _ { 1 } ^ { \beta } \partial _ { \beta } \epsilon _ { 2 } ^ { \alpha } + \epsilon _ { 2 } ^ { \beta } \partial _ { \beta } \epsilon _ { 1 } ^ { \alpha } \, , $$
-</div>
-
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-
-
-Original Image: 20
-</pre>
-</div>
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-
-
-<div class="output_png output_subarea ">
-<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAAAoCAAAAACed+rAAAAEMklEQVR4nO1XTWhcVRQ+5973kkky
-SZPQtFgKIfUPRSSVGhEqGFpLGmoQEcGFEiqCgohKo7Etto0R7EIXVYSKCi7UBkGNsbG2kmCpdSFU
-4x9kpYu2Me2ETDKTkLz37v1czPubdGbehCw6U+ZbXWa+e9733XPOfecx6MaAuN4C1oYgDWVuhP1V
-eRtB2k9JORuBTmybUa6VcjZCoiXZJN21cV2VrAlKjp+MHd/SpSRRWWdE09jb+oMzpImIiMv4PQJ1
-5f5f42bm5spkBK6dCFdF0q7ZAQBF7Fm1CiPuUJX7a8YIu/cxX7stjCJpPhQxkyJiZmYdSV+9Cpv9
-A8o0u+XUEoFpviG0wQlORooVNBRjBpIuYbPUPCcaUhyP5OdUoVWwNrNp9cTEfm8AsPHCfiw5znJP
-0wI08iGLVgSU/mH7k73dpzF3R0PnnfHv4BSkr15FGonWGY9qEEFeGj6PanKMLd+EjtM+Ou26laq7
-W8kwDXOyLiol4NmHtn9k7ts19uDorT//tvVsl5aF6DlVaPHTEHlFGRuMgcIqoKfDb3aHj+/ZhFOn
-pDjYZpHXlzBabcd2oShMO3BL8t6bUlE96fD7GDdpgL/mDfql2y8ecSsjLz2sglwVTG2wPBX2Shqv
-e7M2OAmoxUf+0erxx6AmB/Vy/koJaIdVbwec/OkHAFg4wGmNVG1s0aLXdQQ7W4WVl51FSywGfxgE
-sXCugejc547xXgxV80stVjUReOm1RderVHseViKgvRsXJ16c2siIqC6IGgI59xk22WSbBdlZKph5
-aoOWgkjJb0ek1+6xozEdVsHtc/82eyIMIhLVJn+VUMbwiQkx/PSjE51v2SYRSa8UpMgMAT5tMklD
-f1vDRoSROnVhG9VaPSaMJuaongrC/0Wis77+7EQzmEiY0ps+zCza0AR2/dms/NEEWqfN3Tvr26mP
-XsEojczKk7nulxBtHw5R8r+GmQJ3CwCtFnbcfHW6o/Gq+oPunrQLV1YofD+WO29zerfahVX0I1XT
-f1l5Ighw9Ch3nP99Jw3M47l7MEhQGgCsAApZNP1yO96hQpckAGg4/a2tfQksHTvy6rH8zZdBED6N
-pBiHHIAFACokYwXtSk1bT9ey8o0ASAPAAhSe3Y+9DzxxMY9En/bMIdy1w1YRDayB2dkI/TnCA4nN
-SG3a+0bGSX4Vg+G6MIiIdB1pErWONtePiJH1Gxt1zoIOaC3f/9J0BlFlz1CN5EgmB8TR3wteeCEM
-fn4qeWE3co7mvoqq2fZ1H8/H/B5xzw7QgLI++3Du8FK+mglon36CqHxkdhRDWhkemO67/OUQVEGa
-lV0XJTzG68LfSrZxcKw59aNXFyuNKBJKRg+EigqNG2sGlNSRT9DqC+cp7c/CpZuR1aGMP3WJVGjE
-r2Sk1FAxUmqoGCk1VIyUGipGSg0VI6WGG8bI/xrWeVPkmxT2AAAAAElFTkSuQmCC
-"
->
-</div>
-
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Predicted (and rendered) Latex
-</pre>
-</div>
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-
-
-<div class="output_latex output_subarea ">
-$$\omega _ { a } = \omega _ { b } \qquad \mathrm { ~ o r ~ } \qquad \omega _ { a } = \omega _ { b } ^ { \dagger } = \omega _ { b } ^ { \dagger } $$
-</div>
-
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-
-
-Original Image: 21
-</pre>
-</div>
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-
-
-<div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
-"
->
-</div>
-
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Predicted (and rendered) Latex
-</pre>
-</div>
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-
-
-<div class="output_latex output_subarea ">
-$$\{ \gamma _ { 5 } , \gamma _ { \mu } \} = 2 \gamma _ { 5 } \gamma _ { \mu } - 4 \tilde { \gamma } _ { \mu } . $$
-</div>
-
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-
-
-Original Image: 22
-</pre>
-</div>
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-
-
-<div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
-"
->
-</div>
-
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Predicted (and rendered) Latex
-</pre>
-</div>
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-
-
-<div class="output_latex output_subarea ">
-$$e ^ { i S _ { e f f } ( x ) } = \int d \bar { \psi } d \psi e ^ { i \int \hat { L } _ { f } d t } $$
-</div>
-
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-
-
-Original Image: 23
-</pre>
-</div>
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-
-
-<div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
-"
->
-</div>
-
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Predicted (and rendered) Latex
-</pre>
-</div>
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-
-
-<div class="output_latex output_subarea ">
-$$x ^ { \alpha } , \varepsilon _ { p } , p _ { \alpha } , \qquad \alpha = 1 , 2 , 3 , $$
-</div>
-
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-
-
-Original Image: 24
-</pre>
-</div>
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-
-
-<div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
-"
->
-</div>
-
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Predicted (and rendered) Latex
-</pre>
-</div>
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-
-
-<div class="output_latex output_subarea ">
-$$Z _ { k } ^ { \mathrm { p e r t } } ( M , { \cal M } ) \in P S ( k ) $$
-</div>
-
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-
-
-Original Image: 25
-</pre>
 </div>
 </div>
 
-<div class="output_area"><div class="prompt"></div>
-
-
-<div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
-"
->
-</div>
-
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Predicted (and rendered) Latex
-</pre>
-</div>
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-
-
-<div class="output_latex output_subarea ">
-$$Z = \int D U \operatorname { e x p } \{ - \Gamma [ U ] \} $$
-</div>
-
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-
-
-Original Image: 26
-</pre>
-</div>
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-
-
-<div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
-lmGogj1nwboAAAAASUVORK5CYII=
-"
->
-</div>
-
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Predicted (and rendered) Latex
-</pre>
-</div>
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-
-
-<div class="output_latex output_subarea ">
-$$F _ { \lambda \mu } ^ { \mathrm { s e t } } \equiv \partial _ { \lambda } A _ { \mu } ^ { \mathrm { e x t } } - \partial _ { \mu } A _ { \lambda } ^ { \mathrm { e x t } } . $$
-</div>
-
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-
-
-Original Image: 27
-</pre>
-</div>
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-
-
-<div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
-RK5CYII=
-"
->
-</div>
-
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Predicted (and rendered) Latex
-</pre>
-</div>
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-
-
-<div class="output_latex output_subarea ">
-$$\hat { R } K _ { 1 } \hat { R } K _ { 1 } = q ^ { 2 } K _ { 1 } \hat { R } K _ { 1 } \hat { R } ^ { - 1 } \, . $$
-</div>
-
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-
-
-Original Image: 28
-</pre>
-</div>
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-
-
-<div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
-g+kdfQlYAAAAAElFTkSuQmCC
-"
->
-</div>
-
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Predicted (and rendered) Latex
-</pre>
-</div>
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-
-
-<div class="output_latex output_subarea ">
-$$\Psi ^ { \prime } ( x ) = \operatorname { e x p } ( - i D ^ { a } \theta _ { a } ) \Psi ( x ) , $$
-</div>
-
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-
-
-Original Image: 29
-</pre>
-</div>
 </div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span> 
+</pre></div>
 
-<div class="output_area"><div class="prompt"></div>
-
-
-<div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
-bFhKZLHhP9Pp06RVIMqvAAAAAElFTkSuQmCC
-"
->
-</div>
-
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Predicted (and rendered) Latex
-</pre>
-</div>
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-
-
-<div class="output_latex output_subarea ">
-$$V ( \phi ) = \mu ^ { 2 } \phi ^ { \dagger } \phi + \lambda ( \phi ^ { \dagger } \phi ) ^ { 2 } , $$
-</div>
-
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-
-
-Original Image: 30
-</pre>
-</div>
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-
-
-<div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
-TkSuQmCC
-"
->
-</div>
-
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Predicted (and rendered) Latex
-</pre>
-</div>
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-
-
-<div class="output_latex output_subarea ">
-$$[ ( \phi ^ { \dagger } \phi ) ^ { n } ] = Z _ { \mathrm { c i } } ^ { - 1 } ( \phi _ { 0 } ^ { \dagger } \phi _ { 0 } ) ^ { n } \; , $$
-</div>
-
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-
-
-Original Image: 31
-</pre>
-</div>
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-
-
-<div class="output_png output_subarea ">
-<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAAAoCAAAAACed+rAAAAFNElEQVR4nO2YW2xURRzG/3N2t5TS
-FgpJbbZA44MQxBYMjUIjiRcSkQZaTdBq1KAhIAq0SqEilWJYREOy4YUYNdFo0KgJJZZETQX6gIAh
-3khMlZheiAFS4CzbvZ7LzHw+LLt7zrpn26aXNKTfw27mP7u/b74zu3NmDgPdGVIm2hAgjMfFm+Ag
-IMZMxsaBPLFBwCigeUilsZ+TCQ0CXFuxuHDrYxcgx5ztJiIyU03PqIG5WIbrr+Vffn71lSf0acP9
-yrDF7pRVy01gms+D6woRTS9tzBsVLRcLTPN5xDWPIKXQ0jdW9gyA8eh52m4S3GcuqrMxmiUlF8uh
-b8zsAQFjZtEvAICH3oaB0SgXy6FvjOwVIkW4j4ZrBg0jSvf1jfw6pESUm+XQNyr7jJEI1LM6CC5P
-fAcupQQASJl+kYCUMtkzxJykWZrh3CfS7Mxyyif1bm9mFQMRSdLmaN+vFq4hY0vbfQcsaLkhlDDK
-wpISLoUInCmKg4+Tvd0ss5khhYhIQd5J+okkAST7IxEQQJF+QYFrEYPkjcF+oC800NsbykDTxeql
-VZWVlZWVVZU1EYKdZfh2aKS4PQoRMY9bsfYhzZYZ5XBf71UCiJRIlIhAFOZEyaajAAAcHStCXCIe
-h364oDQMjjXT/XF+bl2+j8frSvyGebh4jd/nPQ1un9FIKKnw7YlPsmLxW7Q5jrO+ti5wET144BxE
-2kfw87fZhzVYy+fWFb/rr6+F4OiaNXMQkutPF7TBSDadflqU8P6WumDqfOdOIPxwWRDo8KyCNHCk
-YlYMrZtgQNIBYNP9pj1INBTOCJJiNe+W8wA92EwtiKCVGlXTtPjEUmxuLUfRyoAYdcLEleLHNSFN
-saugE1zcbuYKIhDOPwEA2LgBaHy+pk/8u6Zql9CgLjxGZ0TtZa7jHeLooBZpWr5swu+t8Hq9Xq+3
-3LswBGllvbwRpQPgsab6vcDp6opb4DafFNtWFnH3HugrlStSAqHE/5yHEnYhOE8ICJAytuojbUC9
-oR53/QCx5wNlH9Z23HUcJnrrzWXL4Q1Clzvz/C35B+IQgJSpBSSmppVYhNKsU1qZCtxatvEBM9jw
-WmFUCKtPii3tZdVT669ZeQrCOkqRZeT/DyL0hmmLyuaWl88tKDMRLDeq97e3/p5nQJeNW9BJW/YL
-Q2r5TT0fK79C5IZaWQh6VeCTQ0cIO9qbN0jD0sdlmm0v+6jnn+q1CZfk9bevwo5BIK6Gb6iqqqqh
-sIkrT2JvfQNalgtu4q1vIFbR+9ARcx2C6dqGqAloQDyJlWklkqRYIa6WqxBbm/R7v1qP/DaYFh8L
-O6P8ZhHHfjJyj9ohiEWmuv6Zwe30c8/8l1Rd/FbcLeRJug5d3UwXxEE69mL39C+wbQGaFhnO/7uk
-1PKbwFODWunSWKgkbhuaTLPt5W569mbQs/rT3SPdrCipJRgAhPvSksX99e0Pnnjunkt5xtnXfzTZ
-I/4iyrs0b98F89W65oGK7YW0to7qap2OZOlBEYHx97o+i1Pbny/gQ4NZLhrjKba9fGpv1d/FX/e8
-UTPSI1/284j1Jmrdj6pzhk8GCyzpLrw8OzDXKAjoMwLzs4zMaa8b8BQN3yihzCBSkkJwcTBFIQ7m
-JuJuIinB3GBEZCouIT1SDHmYAwssOn83IyLKtvdJszPLiiKVIfYjwwgy1OBG8tnwghl/zABjYASi
-kRw0MKJPE9H4HnURMUvG48lPVt0xZ/ZxfRw0Lo8UHTQ1I5NNU0Emm6aCTDZNBZlsmgoy2TQVZLLp
-P5v0WQBdbc9cAAAAAElFTkSuQmCC
-"
->
-</div>
-
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Predicted (and rendered) Latex
-</pre>
-</div>
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-
-
-<div class="output_latex output_subarea ">
-$$\Sigma _ { M N R _ { - } } = \Sigma _ { ( i t ^ { N } R - { \cal S } } { \cal S } _ { R } \cdots $$
-</div>
-
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-
-
-Original Image: 32
-</pre>
-</div>
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-
-
-<div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
-gg==
-"
->
-</div>
-
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Predicted (and rendered) Latex
-</pre>
-</div>
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-
-
-<div class="output_latex output_subarea ">
-$${ \cal A } _ { -- } : = \langle S _ { - n } | n \geq h ( S ) \rangle \, . $$
-</div>
-
-</div>
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-
-
-</pre>
 </div>
-</div>
-
 </div>
 </div>
 
