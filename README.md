@@ -28,7 +28,7 @@ The goal is to infer the LaTeX formula that can render such an image:
 
 ## Sample Results From This Implementation
 
-![png](sample1.png)
+![png](sample.png)
 
 For more results, view [results_validset.html](https://rawgit.com/ritheshkumar95/im2markup-tensorflow/master/results_validset.html), [results_testset.html](https://rawgit.com/ritheshkumar95/im2markup-tensorflow/master/results_testset.html) files.
 
