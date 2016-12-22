@@ -8,9 +8,6 @@ import tflib
 import numpy
 from tensorflow.python.ops import array_ops
 
-'''
-Wrapper function to perform different initialization techniques
-'''
 def initializer(
     name,
     shape,
@@ -21,6 +18,19 @@ def initializer(
     range=0.01,
     alpha=0.01
     ):
+    """
+    Wrapper function to perform weight initialization using standard techniques
+
+    :parameters:
+        name: Name of initialization technique. Follows same names as lasagne.init module
+        shape: list or tuple containing shape of weights
+        val: Fill value in case of constant initialization
+        gain: one of 'linear','sigmoid','tanh', 'relu' or 'leakyrelu'
+        std: standard deviation used for normal / uniform initialization
+        mean: mean value used for normal / uniform initialization
+        alpha: used when gain = 'leakyrelu'
+    """
+
     if gain in ['linear','sigmoid','tanh']:
         gain = 1.0
     elif gain=='leakyrelu':
@@ -49,11 +59,31 @@ def initializer(
     else:
         return lasagne.init.GlorotUniform(gain=gain).sample(shape)
 
+def Embedding(
+    name,
+    n_symbols,
+    output_dim,
+    indices
+    ):
+    """
+    Creates an embedding matrix of dimensions n_symbols x output_dim upon first use.
+    Looks up embedding vector for each input symbol
 
-'''
-Performs a linear / dense / affine transformation on the input data
-Optionally, weight normalization can be performed
-'''
+    :parameters:
+        name: name of embedding matrix tensor variable
+        n_symbols: No. of input symbols
+        output_dim: Embedding dimension
+        indices: input symbols tensor
+    """
+
+    with tf.name_scope(name) as scope:
+        emb = tflib.param(
+            name,
+            initializer('Normal',[n_symbols, output_dim],std=1.0/np.sqrt(n_symbols))
+            )
+
+        return tf.nn.embedding_lookup(emb,indices)
+
 def Linear(
     name,
     inputs,
@@ -65,6 +95,20 @@ def Linear(
     weightnorm=False,
     **kwargs
     ):
+    """
+    Compute a linear transform of one or more inputs, optionally with a bias.
+    Supports more than 2 dimensions. (in which case last axis is considered the dimension to be transformed)
+
+    :parameters:
+        input_dim: tuple of ints, or int; dimensionality of the input
+        output_dim: int; dimensionality of output
+        activation: 'linear','sigmoid', etc. ; used as gain parameter for weight initialization ;
+                     DOES NOT APPLY THE ACTIVATION MENTIONED IN THIS PARAMETER
+        bias: flag that denotes whether bias should be applied
+        init: name of weight initializer to be used
+        weightnorm: flag that denotes whether weight normalization should be applied
+    """
+
     with tf.name_scope(name) as scope:
         weight_values = initializer(init,(input_dim,output_dim),gain=activation, **kwargs)
 
@@ -105,10 +149,6 @@ def Linear(
 
         return result
 
-'''
-Performs 2D convolution in the NCHW data format
-Weight normalization / batch normalization can be performed optionally
-'''
 def conv2d(
     name,
     input,
@@ -121,8 +161,21 @@ def conv2d(
     bias = True,
     weightnorm = False,
     batchnorm = False,
+    is_training=True,
     **kwargs
     ):
+    """
+    Performs 2D convolution on input in NCHW data format
+
+    :parameters:
+        input - input to be convolved
+        kernel - int; size of convolutional kernel
+        stride - int; horizontal / vertical stride to be used
+        depth - int; no. of channels of input
+        num_filters - int; no. of output channels required
+        batchnorm - flag that denotes whether batch normalization should be applied
+        is_training - flag that denotes batch normalization mode
+    """
     with tf.name_scope(name) as scope:
         filter_values = initializer(init,(kernel,kernel,depth,num_filters),gain='relu',**kwargs)
         filters = tflib.param(
@@ -151,19 +204,25 @@ def conv2d(
             out = tf.nn.bias_add(out,b,data_format='NCHW')
 
         if batchnorm:
-            out = tf.contrib.layers.batch_norm(out,scope=scope,data_format='NCHW')
+            out = tf.contrib.layers.batch_norm(out,scope=scope,is_training=is_training,data_format='NCHW')
 
         return out
 
-'''
-Performs max pooling operation with kernel kxk and stride (s,s) on input with NCHW data foramt
-'''
 def max_pool(
     name,
     l_input,
     k,
     s
     ):
+    """
+    Max pooling operation with kernel size k and stride s on input with NCHW data format
+
+    :parameters:
+        l_input: input in NCHW data format
+        k: tuple of int, or int ; kernel size
+        s: tuple of int, or int ; stride value
+    """
+
     if type(k)==int:
         k1=k
         k2=k
@@ -179,14 +238,14 @@ def max_pool(
     return tf.nn.max_pool(l_input, ksize=[1, 1, k1, k2], strides=[1, 1, s1, s2],
                           padding='SAME', name=name, data_format='NCHW')
 
-'''
-Performs local response normalization (ref. Alexnet)
-'''
 def norm(
     name,
     l_input,
     lsize=4
     ):
+    """
+    Wrapper function to perform local response normalization (ref. Alexnet)
+    """
     return tf.nn.lrn(l_input, lsize, bias=1.0, alpha=0.001 / 9.0, beta=0.75, name=name)
 
 class GRUCell(tf.nn.rnn_cell.RNNCell):
@@ -235,6 +294,13 @@ def GRU(
     n_in,
     n_hid
     ):
+    """
+    Compute recurrent memory states using Gated Recurrent Units
+
+    :parameters:
+        n_in : int ; Dimensionality of input
+        n_hid : int ; Dimensionality of hidden state / memory state
+    """
     h0 = tflib.param(name+'.h0', np.zeros(n_hid, dtype='float32'))
     batch_size = tf.shape(inputs)[0]
     h0 = tf.reshape(tf.tile(h0, tf.pack([batch_size])), tf.pack([batch_size, n_hid]))
@@ -281,6 +347,18 @@ def LSTM(
     n_hid,
     h0
     ):
+    """
+    Compute recurrent memory states using Long Short-Term Memory units
+
+    :parameters:
+        n_in : int ; Dimensionality of input
+        n_hid : int ; Dimensionality of hidden state / memory state
+    """
+    batch_size = tf.shape(inputs)[0]
+    if h0 is None:
+        h0 = tflib.param(name+'.init.h0', np.zeros(2*n_hid, dtype='float32'))
+        h0 = tf.reshape(tf.tile(h0_1, tf.pack([batch_size])), tf.pack([batch_size, 2*n_hid]))
+
     return tf.nn.dynamic_rnn(LSTMCell(name, n_in, n_hid), inputs, initial_state=h0, swap_memory=True)
 
 def BiLSTM(
@@ -291,6 +369,16 @@ def BiLSTM(
     h0_1=None,
     h0_2=None
     ):
+    """
+    Compute recurrent memory states using Bidirectional Long Short-Term Memory units
+
+    :parameters:
+        n_in : int ; Dimensionality of input
+        n_hid : int ; Dimensionality of hidden state / memory state
+        h0_1: vector ; Initial hidden state of forward LSTM
+        h0_2: vector ; Initial hidden state of backward LSTM
+    """
+
     batch_size = tf.shape(inputs)[0]
     if h0_1 is None:
         h0_1 = tflib.param(name+'.init.h0_1', np.zeros(2*n_hid, dtype='float32'))
@@ -307,122 +395,6 @@ def BiLSTM(
     seq_len = tf.tile(tf.expand_dims(tf.shape(inputs)[1],0),[batch_size])
     outputs = tf.nn.bidirectional_dynamic_rnn(cell1, cell2, inputs, sequence_length=seq_len, initial_state_fw=h0_1, initial_state_bw=h0_2, swap_memory=True)
     return tf.concat(2,[outputs[0][0],outputs[0][1]])
-
-'''
-Attention Mechanism as proposed in the Show, Attend and Tell paper (https://arxiv.org/pdf/1502.03044v3.pdf)
-'''
-class LSTMAttentionCell(tf.nn.rnn_cell.RNNCell):
-    def __init__(self, name, n_in, n_hid, ctx, dim_ctx, batch_size=32, forget_bias=1.0):
-        self._n_in = n_in
-        self._n_hid = n_hid
-        self._name = name
-        self._forget_bias = forget_bias
-        self._dim_ctx = dim_ctx
-        self._batch_size = batch_size
-        self._ctx = ctx
-
-    @property
-    def state_size(self):
-        return self._n_hid
-
-    @property
-    def output_size(self):
-        return self._n_hid
-
-    def __call__(self, _input, state, scope=None):
-
-        h_tm1, c_tm1 = tf.split(1,2,state)
-
-        beta = tf.nn.sigmoid(tflib.ops.Linear(self._name+'._beta',h_tm1,self._n_hid,1))
-        h_att = T.tanh(self._ctx + tf.expand_dims(tflib.ops.Linear(self._name+'.h_att',h_tm1,self._n_hid,self._dim_ctx[1]),1))
-        e_t = tflib.ops.Linear('f_att',h_att,self._dim_ctx[1],1,bias=False)[:,:,0]
-        alpha_t = tf.nn.softmax(e_t)
-
-        z_t = beta*tf.reduce_sum(tf.expand_dims(alpha_t,2)*self._ctx,1)
-
-        gates = tflib.ops.Linear(
-                self._name+'.Gates',
-                tf.concat(1, [_input, h_tm1, z_t]),
-                self._n_in + self._n_hid + self._dim_ctx[1],
-                4 * self._n_hid
-            )
-
-        i_t,f_t,o_t,g_t = tf.split(1, 4, gates)
-
-        c_t = tf.nn.sigmoid(f_t+self._forget_bias)*c_tm1 + tf.nn.sigmoid(i_t)*tf.tanh(g_t)
-        h_t = tf.nn.sigmoid(o_t)*tf.tanh(c_t)
-        new_state = tf.concat(1,[h_t,c_t])
-
-        new_out = tf.concat(1,[z_t,_input,h_t])
-
-        return new_out,new_state
-
-class OutputProjectionWrapper(tf.nn.rnn_cell.RNNCell):
-
-    def __init__(self, cell, output_size):
-        if not isinstance(cell, tf.nn.rnn_cell.RNNCell):
-            raise TypeError("The parameter cell is not RNNCell.")
-        if output_size < 1:
-            raise ValueError("Parameter output_size must be > 0: %d." % output_size)
-        self._cell = cell
-        self._output_size = output_size
-
-    @property
-    def state_size(self):
-        return self._cell.state_size
-
-    @property
-    def output_size(self):
-        return self._output_size
-
-    def __call__(self, inputs, state, scope=None):
-        """Run the cell and output projection on inputs, starting from state."""
-
-        concat_out,state = self._cell(inputs,state)
-        batch_size = tf.shape(concat_out)[0]
-        c = self._cell
-        z_t = tf.slice(concat_out,[0,0],[batch_size,c._dim_ctx[1]])
-        _input = tf.slice(concat_out,[0,c._dim_ctx[1]],[batch_size,c._n_hid])
-        h_t = tf.slice(concat_out,[0,c._dim_ctx[1]+c._n_hid],[batch_size,c._n_hid])
-
-        # h_out = tflib.ops.Linear('h_out',h_t,c._n_hid,c._n_hid)
-        # h_out += tflib.ops.Linear('ctx_out',z_t,c._dim_ctx[1],c._n_hid)
-        # h_out += tflib.ops.Linear('prev2out',_input,c._n_hid,c._n_hid)
-        # h_out = tf.tanh(h_out)
-
-        h_out = tf.tanh(tflib.ops.Linear(
-            'DeepOutput',
-            tf.concat(1,[h_t,z_t,_input]),
-            c._n_hid + c._dim_ctx[1] + c._n_hid,
-            c._n_hid
-        ))
-
-        out_logits = tflib.ops.Linear('out_logits',h_out,c._n_hid,self._output_size)
-
-        return out_logits, state
-
-def LSTMAttention(
-    name,
-    inputs,
-    context,
-    n_in,
-    n_hid,
-    n_out,
-    dim_ctx,
-    h0,
-    reset
-    ):
-    print h0
-    def f1():
-        return tf.tanh(tflib.ops.Linear(name+'.Init.ch',tf.reduce_mean(context,1),dim_ctx[-1],2*n_hid))
-    def f2():
-        return h0
-    init = tf.cond(tf.equal(reset[0],1),f1, f2)
-    ctx_proj = tflib.ops.Linear('Project.Features',context,dim_ctx[1],dim_ctx[1],bias=False)
-    cell = LSTMAttentionCell(name, n_in, n_hid, ctx_proj, dim_ctx)
-    out_cell = OutputProjectionWrapper(cell,n_out)
-    out = tf.nn.dynamic_rnn(out_cell, inputs, initial_state=init, swap_memory=True)
-    return out[0], out[1]
 
 '''
 Attentional Decoder as proposed in HarvardNLp paper (https://arxiv.org/pdf/1609.04938v1.pdf)
@@ -486,9 +458,6 @@ class im2latexAttentionCell(tf.nn.rnn_cell.RNNCell):
 
         return output_t,new_state
 
-'''
-Wrapper function for Bidirectional LSTM encoder on CNN features grid + Attentional Decoder as proposed in the HarvardNLP paper (https://arxiv.org/pdf/1609.04938v1.pdf)
-'''
 def im2latexAttention(
     name,
     inputs,
@@ -500,6 +469,21 @@ def im2latexAttention(
     H,
     W
     ):
+    """
+    Function that encodes the feature grid extracted from CNN using BiLSTM encoder
+    and decodes target sequences using an attentional decoder mechanism
+
+    PS: Feature grid can be of variable size (as long as size is within 'H' and 'W')
+
+    :parameters:
+        ctx - (N,C,H,W) format ; feature grid extracted from CNN
+        input_dim - int ; Dimensionality of input sequences (Usually, Embedding Dimension)
+        ENC_DIM - int; Dimensionality of BiLSTM Encoder
+        DEC_DIM - int; Dimensionality of Attentional Decoder
+        D - int; No. of channels in feature grid
+        H - int; Maximum height of feature grid
+        W - int; Maximum width of feature grid
+    """
 
     V = tf.transpose(ctx,[0,2,3,1]) # (B, H, W, D)
     V_cap = []
@@ -535,17 +519,3 @@ def im2latexAttention(
     out = tf.nn.dynamic_rnn(cell, inputs, initial_state=h0_dec, sequence_length=seq_len, swap_memory=True)
 
     return out
-
-def Embedding(
-    name,
-    n_symbols,
-    output_dim,
-    indices
-    ):
-    with tf.name_scope(name) as scope:
-        emb = tflib.param(
-            name,
-            initializer('Normal',[n_symbols, output_dim],std=1.0/np.sqrt(n_symbols))
-            )
-
-        return tf.nn.embedding_lookup(emb,indices)

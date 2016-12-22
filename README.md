@@ -26,7 +26,7 @@ The goal is to infer the LaTeX formula that can render such an image:
  d s _ { 1 1 } ^ { 2 } = d x ^ { + } d x ^ { - } + l _ { p } ^ { 9 } \frac { p _ { - } } { r ^ { 7 } } \delta ( x ^ { - } ) d x ^ { - } d x ^ { - } + d x _ { 1 } ^ { 2 } + \; \cdots \; + d x _ { 9 } ^ { 2 }
 ```
 
-## Sample Results From This Implementation
+## Sample results from this implementation
 
 ![png](sample.png)
 
@@ -62,12 +62,14 @@ Webkit2png is used for rendering HTML during evaluation.
 
 The images in the dataset contain a LaTeX formula rendered on a full page. To accelerate training, we need to preprocess the images.
 
+Please download the training data from https://zenodo.org/record/56198#.WFojcXV94jA and extract into source (master) folder.
+
 ```
 cd im2markup
 ```
 
 ```
-python scripts/preprocessing/preprocess_images.py --input-dir data/sample/images --output-dir data/sample/images_processed
+python scripts/preprocessing/preprocess_images.py --input-dir ../formula_images --output-dir ../images_processed
 ```
 
 The above command will crop the formula area, and group images of similar sizes to facilitate batching.
@@ -75,7 +77,7 @@ The above command will crop the formula area, and group images of similar sizes 
 Next, the LaTeX formulas need to be tokenized or normalized.
 
 ```
-python scripts/preprocessing/preprocess_formulas.py --mode normalize --input-file data/sample/formulas.lst --output-file data/sample/formulas.norm.lst
+python scripts/preprocessing/preprocess_formulas.py --mode normalize --input-file ../im2latex_formulas.lst --output-file formulas.norm.lst
 ```
 
 The above command will normalize the formulas. Note that this command will produce some error messages since some formulas cannot be parsed by the KaTeX parser.
@@ -83,24 +85,26 @@ The above command will normalize the formulas. Note that this command will produ
 Then we need to prepare train, validation and test files. We will exclude large images from training and validation set, and we also ignore formulas with too many tokens or formulas with grammar errors.
 
 ```
-python scripts/preprocessing/preprocess_filter.py --filter --image-dir data/sample/images_processed --label-path data/sample/formulas.norm.lst --data-path data/sample/train.lst --output-path data/sample/train_filter.lst
+python scripts/preprocessing/preprocess_filter.py --filter --image-dir ../images_processed --label-path formulas.norm.lst --data-path ../im2latex_train.lst --output-path train.lst
 ```
 
 ```
-python scripts/preprocessing/preprocess_filter.py --filter --image-dir data/sample/images_processed --label-path data/sample/formulas.norm.lst --data-path data/sample/validate.lst --output-path data/sample/validate_filter.lst
+python scripts/preprocessing/preprocess_filter.py --filter --image-dir ../images_processed --label-path formulas.norm.lst --data-path ../im2latex_validate.lst --output-path validate.lst
 ```
 
 ```
-python scripts/preprocessing/preprocess_filter.py --no-filter --image-dir data/sample/images_processed --label-path data/sample/formulas.norm.lst --data-path data/sample/test.lst --output-path data/sample/test_filter.lst
+python scripts/preprocessing/preprocess_filter.py --no-filter --image-dir ../images_processed --label-path formulas.norm.lst --data-path ../im2latex_test.lst --output-path test.lst
 ```
 
 Finally, we generate the vocabulary from training set. All tokens occuring less than (including) 1 time will be excluded from the vocabulary.
 
 ```
-python scripts/preprocessing/generate_latex_vocab.py --data-path data/sample/train_filter.lst --label-path data/sample/formulas.norm.lst --output-file data/sample/latex_vocab.txt
+python scripts/preprocessing/generate_latex_vocab.py --data-path train.lst --label-path formulas.norm.lst --output-file latex_vocab.txt
 ```
 
-train_list_buckets.npy, valid_buckets.npy, test_buckets.npy are used to segment the train, valid, test sets based on image size. This is required as 1 batch of training data should have images all of the same size. These npy files can be generated using the DataProcessing.ipynb script
+Train, Test and Valid images need to be segmented into buckets based on image size (height, width) to facilitate batch processing.
+
+train_buckets.npy, valid_buckets.npy, test_buckets.npy can be generated using the DataProcessing.ipynb script
 
 ```
 ### Run the individual cells from this notebook
@@ -113,7 +117,7 @@ ipython notebook DataProcessing.ipynb
 python attention.py
 ```
 Default hyperparameters used:
-* BATCH_SIZE      = 64
+* BATCH_SIZE      = 20
 * EMB_DIM         = 80
 * ENC_DIM         = 256
 * DEC_DIM         = ENC_DIM*2
@@ -127,16 +131,15 @@ The train NLL drops to 0.08 after 18 epochs of training on 24GB Nvidia M40 GPU.
 
 ## Test
 
-predict() function in the attention.py script can be used to predict from validation or test sets.
+predict() function in the attention.py script can be called to predict from validation or test sets.
 
-Predict.ipynb can be used to display and render the results.
+Predict.ipynb script displays and renders the results saved by the predict() function
 
 ## Evaluate
 
-#### Text Metrics
+attention.py scores the train set and validation set after each epoch (measures mean train NLL, perplexity)
 
-TODO
+#### Scores from this implementation
 
-#### Image Metrics
-
-TODO
+![results_1](results_1.png)
+![results_2](results_2.png)
