@@ -53,7 +53,9 @@ gvs = optimizer.compute_gradients(loss)
 capped_gvs = [(tf.clip_by_norm(grad, 5.), var) for grad, var in gvs]
 train_step = optimizer.apply_gradients(capped_gvs)
 
-def predict(set='test',batch_size=1):
+def predict(set='test',batch_size=1,visualize=True):
+    if visualize:
+        assert (batch_size==1), "Batch size should be 1 for visualize mode"
     import random
     # f = np.load('train_list_buckets.npy').tolist()
     f = np.load(set+'_buckets.npy').tolist()
@@ -75,7 +77,6 @@ def predict(set='test',batch_size=1):
     l_size = random_key[0]*2
     r_size = random_key[1]*2
     inp_image = Image.fromarray(imgs[0][0]).resize((l_size,r_size))
-    inp_image.show()
     l = int(np.ceil(random_key[1]/8.))
     r = int(np.ceil(random_key[0]/8.))
     properties = np.load('properties.npy').tolist()
@@ -84,27 +85,29 @@ def predict(set='test',batch_size=1):
     for i in xrange(1,160):
         inp_seqs[:,i] = sess.run(predictions,feed_dict={X:imgs,input_seqs:inp_seqs[:,:i]})
         #print i,inp_seqs[:,i]
-        att = sorted(list(enumerate(tflib.ops.ctx_vector[-1].flatten())),key=lambda tup:tup[1],reverse=True)
-        idxs,att = zip(*att)
-        j=1
-        while sum(att[:j])<0.9:
-            j+=1
-        positions = idxs[:j]
-        print "Attention weights: ",att[:j]
-        positions = [(pos/r,pos%r) for pos in positions]
-        outarray = np.ones((l,r))*255.
-        for loc in positions:
-            outarray[loc] = 0.
-        out_image = Image.fromarray(outarray).resize((l_size,r_size),Image.NEAREST)
-        print "Latex sequence: ",idx_to_chars(inp_seqs[0,:i])
-        outp = Image.blend(inp_image.convert('RGBA'),out_image.convert('RGBA'),0.5)
-        outp.show(title=properties['idx_to_char'][inp_seqs[0,i]])
-        # raw_input()
-        time.sleep(3)
-        os.system('pkill display')
+        if visualize==True:
+            att = sorted(list(enumerate(tflib.ops.ctx_vector[-1].flatten())),key=lambda tup:tup[1],reverse=True)
+            idxs,att = zip(*att)
+            j=1
+            while sum(att[:j])<0.9:
+                j+=1
+            positions = idxs[:j]
+            print "Attention weights: ",att[:j]
+            positions = [(pos/r,pos%r) for pos in positions]
+            outarray = np.ones((l,r))*255.
+            for loc in positions:
+                outarray[loc] = 0.
+            out_image = Image.fromarray(outarray).resize((l_size,r_size),Image.NEAREST)
+            print "Latex sequence: ",idx_to_chars(inp_seqs[0,:i])
+            outp = Image.blend(inp_image.convert('RGBA'),out_image.convert('RGBA'),0.5)
+            outp.show(title=properties['idx_to_char'][inp_seqs[0,i]])
+            # raw_input()
+            time.sleep(3)
+            os.system('pkill display')
 
     np.save('pred_imgs',imgs)
     np.save('pred_latex',inp_seqs)
+    print "Saved npy files! Use Predict.ipynb to view results"
     return inp_seqs
 
 def score(set='valid',batch_size=32):
