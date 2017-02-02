@@ -36,6 +36,7 @@ emb_seqs = tflib.ops.Embedding('Embedding',V,EMB_DIM,input_seqs)
 ctx = tflib.network.im2latex_cnn(X,NUM_FEATS_START,True)
 out,state = tflib.ops.im2latexAttention('AttLSTM',emb_seqs,ctx,EMB_DIM,ENC_DIM,DEC_DIM,D,H,W)
 logits = tflib.ops.Linear('MLP.1',out,DEC_DIM,V)
+predictions = tf.argmax(tf.nn.softmax(logits[:,-1]),axis=1)
 
 
 loss = tf.reshape(tf.nn.sparse_softmax_cross_entropy_with_logits(
@@ -52,23 +53,15 @@ gvs = optimizer.compute_gradients(loss)
 capped_gvs = [(tf.clip_by_norm(grad, 5.), var) for grad, var in gvs]
 train_step = optimizer.apply_gradients(capped_gvs)
 
-def predict(set='test',batch_size=32):
-    test_img = tf.placeholder(shape=(None,None,None,None),dtype=tf.float32)
-    test_seqs = tf.placeholder(shape=(None,None),dtype=tf.int32)
-    emb_seqs = tflib.ops.Embedding('Embedding',V,EMB_DIM,test_seqs)
-    ctx = tflib.network.im2latex_cnn(test_img,NUM_FEATS_START, bn=True, train_mode=False)
-    out,state = tflib.ops.im2latexAttention('AttLSTM',emb_seqs,ctx,EMB_DIM,ENC_DIM,DEC_DIM,D,H,W)
-    logits = tflib.ops.Linear('MLP.1',out,DEC_DIM,V)
-    predictions = tf.argmax(tf.nn.softmax(logits[:,-1]),axis=1)
-
-    print "Compiled Test function!"
-
+def predict(set='test',batch_size=1):
     import random
     # f = np.load('train_list_buckets.npy').tolist()
     f = np.load(set+'_buckets.npy').tolist()
     random_key = random.choice(f.keys())
+    #random_key = (160,40)
     f = f[random_key]
     imgs = []
+    print "Image shape: ",random_key
     while len(imgs)!=batch_size:
         start = np.random.randint(0,len(f),1)[0]
         if os.path.exists('./images_processed/'+f[start][0]):
@@ -77,9 +70,39 @@ def predict(set='test',batch_size=32):
     imgs = np.asarray(imgs,dtype=np.float32).transpose(0,3,1,2)
     inp_seqs = np.zeros((batch_size,160)).astype('int32')
     inp_seqs[:,0] = np.load('properties.npy').tolist()['char_to_idx']['#START']
+    tflib.ops.ctx_vector = []
+
+    l_size = random_key[0]*2
+    r_size = random_key[1]*2
+    inp_image = Image.fromarray(imgs[0][0]).resize((l_size,r_size))
+    inp_image.show()
+    l = int(np.ceil(random_key[1]/8.))
+    r = int(np.ceil(random_key[0]/8.))
+    properties = np.load('properties.npy').tolist()
+    idx_to_chars = lambda Y: ' '.join(map(lambda x: properties['idx_to_char'][x],Y))
+
     for i in xrange(1,160):
-        inp_seqs[:,i] = sess.run(predictions,feed_dict={test_img:imgs,test_seqs:inp_seqs[:,:i]})
-        print i,inp_seqs[:,i]
+        inp_seqs[:,i] = sess.run(predictions,feed_dict={X:imgs,input_seqs:inp_seqs[:,:i]})
+        #print i,inp_seqs[:,i]
+        att = sorted(list(enumerate(tflib.ops.ctx_vector[-1].flatten())),key=lambda tup:tup[1],reverse=True)
+        idxs,att = zip(*att)
+        j=1
+        while sum(att[:j])<0.9:
+            j+=1
+        positions = idxs[:j]
+        print "Attention weights: ",att[:j]
+        positions = [(pos/r,pos%r) for pos in positions]
+        outarray = np.ones((l,r))*255.
+        for loc in positions:
+            outarray[loc] = 0.
+        out_image = Image.fromarray(outarray).resize((l_size,r_size),Image.NEAREST)
+        print "Latex sequence: ",idx_to_chars(inp_seqs[0,:i])
+        outp = Image.blend(inp_image.convert('RGBA'),out_image.convert('RGBA'),0.5)
+        outp.show(title=properties['idx_to_char'][inp_seqs[0,i]])
+        # raw_input()
+        time.sleep(3)
+        os.system('pkill display')
+
     np.save('pred_imgs',imgs)
     np.save('pred_latex',inp_seqs)
     return inp_seqs
@@ -91,6 +114,7 @@ def score(set='valid',batch_size=32):
     for score_imgs,score_seqs,score_mask in score_itr:
         _loss = sess.run(loss,feed_dict={X:score_imgs,seqs:score_seqs,mask:score_mask})
         losses.append(_loss)
+        print _loss
 
     set_loss = np.mean(losses)
     perp = np.mean(map(lambda x: np.power(np.e,x), losses))
@@ -104,6 +128,7 @@ init = tf.global_variables_initializer()
 # init = tf.initialize_all_variables()
 sess.run(init)
 saver = tf.train.Saver()
+saver.restore(sess,'./weights_best.ckpt')
 ## start the tensorflow QueueRunner's
 # tf.train.start_queue_runners(sess=sess)
 ## start our custom queue runner's threads

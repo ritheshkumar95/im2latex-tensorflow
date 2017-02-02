@@ -1,4 +1,4 @@
-# im2latex tensorflow implementation
+D# im2latex tensorflow implementation
 
 This is a tensorflow implementation of the HarvardNLP paper - What You Get Is What You See: A Visual Markup Decompiler.
 
@@ -143,3 +143,27 @@ attention.py scores the train set and validation set after each epoch (measures 
 
 ![results_1](results_1.png)
 ![results_2](results_2.png)
+
+#### Visualizing the attention mechanism
+
+![att_1](Pictures/Attention_1.png)
+
+![att_2](Pictures/Attention_2.png)
+
+![att_3](Pictures/Attention_3.png)
+
+![att_4](Pictures/Attention_4.png)
+
+![att_5](Pictures/Attention_5.png)
+
+![att_6](Pictures/Attention_6.png)
+
+![att_7](Pictures/Attention_7.png)
+
+![att_8](Pictures/Attention_8.png)
+
+![att_9](Pictures/Attention_9.png)
+
+![att_10](Pictures/Attention_10.png)
+
+![att_11](Pictures/Attention_11.png)

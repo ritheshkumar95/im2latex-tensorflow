@@ -399,6 +399,7 @@ def BiLSTM(
 '''
 Attentional Decoder as proposed in HarvardNLp paper (https://arxiv.org/pdf/1609.04938v1.pdf)
 '''
+ctx_vector = []
 class im2latexAttentionCell(tf.nn.rnn_cell.RNNCell):
     def __init__(self, name, n_in, n_hid, L, D, ctx, forget_bias=1.0):
         self._n_in = n_in
@@ -438,7 +439,18 @@ class im2latexAttentionCell(tf.nn.rnn_cell.RNNCell):
 
         target_t = tf.expand_dims(tflib.ops.Linear(self._name+'.target_t',h_t,self._n_hid,self._n_hid,bias=False),2)
         # target_t = tf.expand_dims(h_t,2) # (B, HID, 1)
-        a_t = tf.nn.softmax(tf.batch_matmul(self._ctx,target_t)[:,:,0]) # (B, H*W, D) * (B, D, 1)
+        a_t = tf.nn.softmax(tf.batch_matmul(self._ctx,target_t)[:,:,0],name='a_t') # (B, H*W, D) * (B, D, 1)
+        print a_t.name
+
+        def _debug_bkpt(val):
+            global ctx_vector
+            ctx_vector = []
+            ctx_vector += [val]
+            return False
+
+        debug_print_op = tf.py_func(_debug_bkpt,[a_t],[tf.bool])
+        with tf.control_dependencies(debug_print_op):
+            a_t = tf.identity(a_t,name='a_t_debug')
 
         a_t = tf.expand_dims(a_t,1) # (B, 1, H*W)
         z_t = tf.batch_matmul(a_t,self._ctx)[:,0]

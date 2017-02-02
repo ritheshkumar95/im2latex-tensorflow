@@ -73,7 +73,7 @@ def im2latex_cnn(X, num_feats, bn, train_mode='True'):
     X = X-128.
     X = X/128.
 
-    X = tf.nn.relu(tflib.ops.conv2d('conv1', X, 3, 1, 1, num_feats, pad = 'SAME', bias=False))
+    X = tf.nn.relu(tflib.ops.conv2d('conv1', X, 3, 1, 1, num_feats, pad = 'SAME', bias=False)) 
     X = tflib.ops.max_pool('pool1', X, k=2, s=2)
 
     X = tf.nn.relu(tflib.ops.conv2d('conv2', X, 3, 1, num_feats, num_feats*2, pad = 'SAME', bias=False))
