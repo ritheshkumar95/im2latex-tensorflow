@@ -108,7 +108,7 @@ train_buckets.npy, valid_buckets.npy, test_buckets.npy can be generated using th
 
 ```
 ### Run the individual cells from this notebook
-ipython notebook DataProcessing.ipynb
+ipython notebook DataPreprocessing.ipynb
 ```
 
 ## Train
