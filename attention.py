@@ -8,6 +8,7 @@ import numpy as np
 import data_loaders
 import time
 import os
+import os.path
 
 BATCH_SIZE      = 20
 EMB_DIM         = 80
@@ -131,7 +132,8 @@ init = tf.global_variables_initializer()
 # init = tf.initialize_all_variables()
 sess.run(init)
 saver = tf.train.Saver()
-saver.restore(sess,'./weights_best.ckpt')
+if os.path.isfile('./weights_best.ckpt'):
+    saver.restore(sess,'./weights_best.ckpt')
 ## start the tensorflow QueueRunner's
 # tf.train.start_queue_runners(sess=sess)
 ## start our custom queue runner's threads
