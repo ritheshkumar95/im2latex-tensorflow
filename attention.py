@@ -132,7 +132,7 @@ init = tf.global_variables_initializer()
 # init = tf.initialize_all_variables()
 sess.run(init)
 saver = tf.train.Saver()
-if os.path.isfile('./weights_best.ckpt'):
+if os.path.isfile('./weights_best.ckpt.index'):
     saver.restore(sess,'./weights_best.ckpt')
 ## start the tensorflow QueueRunner's
 # tf.train.start_queue_runners(sess=sess)
