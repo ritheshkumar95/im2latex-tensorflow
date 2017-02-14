@@ -1,4 +1,4 @@
-D# im2latex tensorflow implementation
+# im2latex tensorflow implementation
 
 This is a tensorflow implementation of the HarvardNLP paper - What You Get Is What You See: A Visual Markup Decompiler.
 
