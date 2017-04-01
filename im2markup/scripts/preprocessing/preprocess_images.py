@@ -6,7 +6,7 @@ from PIL import Image
 sys.path.insert(0, '%s'%os.path.join(os.path.dirname(__file__), '../utils/'))
 from image_utils import *
 from multiprocessing import Pool
-from multiprocessing.dummy import Pool as ThreadPool 
+from multiprocessing.dummy import Pool as ThreadPool
 
 def process_args(args):
     parser = argparse.ArgumentParser(description='Process images for ease of training. Crop images to get rid of the background. For a cropped image of size (w,h), we pad it with PAD_TOP, PAD_BOTTOM, PAD_LEFT, PAD_RIGHT, and the result is of size (w+PAD_LEFT+PAD_RIGHT, h+PAD_TOP+PAD_BOTTOM. Then we see which bucket it falls into and pad them with whitespace to match the smallest bucket that can hold it. Finally, downsample images.')
@@ -41,7 +41,7 @@ def process_args(args):
                         ))
     parser.add_argument('--log-path', dest="log_path",
                         type=str, default='log.txt',
-                        help=('Log file path, default=log.txt' 
+                        help=('Log file path, default=log.txt'
                         ))
     parser.add_argument('--postfix', dest='postfix',
                         type=str, default='.png',
@@ -96,8 +96,8 @@ def main(args):
     pool = ThreadPool(parameters.num_threads)
     logging.info('Jobs running...')
     results = pool.map(main_parallel, [(filename, postfix, os.path.join(output_dir, os.path.basename(filename)), crop_blank_default_size, pad_size, buckets, downsample_ratio) for filename in filenames])
-    pool.close() 
-    pool.join() 
+    pool.close()
+    pool.join()
 
 if __name__ == '__main__':
     main(sys.argv[1:])

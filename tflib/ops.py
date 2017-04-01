@@ -531,3 +531,129 @@ def im2latexAttention(
     out = tf.nn.dynamic_rnn(cell, inputs, initial_state=h0_dec, sequence_length=seq_len, swap_memory=True)
 
     return out
+
+
+class FreeRunIm2LatexAttentionCell(tf.nn.rnn_cell.RNNCell):
+    def __init__(self, name, n_in, n_out, n_hid, L, D, ctx, forget_bias=1.0):
+        self._n_in = n_in
+        self._n_hid = n_hid
+        self._name = name
+        self._forget_bias = forget_bias
+        self._ctx = ctx
+        self._L = L
+        self._D = D
+        self._n_out = n_out
+
+    @property
+    def state_size(self):
+        return self._n_hid
+
+    @property
+    def output_size(self):
+        return self._n_out
+
+    def __call__(self, _input, state, scope=None):
+        h_tm1, c_tm1, output_tm1 = tf.split(1,3,state[:,:3*self._n_hid])
+        _input = tf.argmax(state[:,3*self._n_hid:],axis=1)
+        _input = tflib.ops.Embedding('Embedding',self._n_out,self._n_in,_input)
+
+
+        gates = tflib.ops.Linear(
+                self._name+'.Gates',
+                tf.concat(1, [_input, output_tm1]),
+                self._n_in + self._n_hid,
+                4 * self._n_hid,
+                activation='sigmoid'
+            )
+
+        i_t,f_t,o_t,g_t = tf.split(1, 4, gates)
+
+        ## removing forget_bias
+        c_t = tf.nn.sigmoid(f_t)*c_tm1 + tf.nn.sigmoid(i_t)*tf.tanh(g_t)
+        h_t = tf.nn.sigmoid(o_t)*tf.tanh(c_t)
+
+
+        target_t = tf.expand_dims(tflib.ops.Linear(self._name+'.target_t',h_t,self._n_hid,self._n_hid,bias=False),2)
+        # target_t = tf.expand_dims(h_t,2) # (B, HID, 1)
+        a_t = tf.nn.softmax(tf.batch_matmul(self._ctx,target_t)[:,:,0],name='a_t') # (B, H*W, D) * (B, D, 1)
+        a_t = tf.expand_dims(a_t,1) # (B, 1, H*W)
+        z_t = tf.batch_matmul(a_t,self._ctx)[:,0]
+        # a_t = tf.expand_dims(a_t,2)
+        # z_t = tf.reduce_sum(a_t*self._ctx,1)
+
+        output_t = tf.tanh(tflib.ops.Linear(
+            self._name+'.output_t',
+            tf.concat(1,[h_t,z_t]),
+            self._D+self._n_hid,
+            self._n_hid,
+            bias=False,
+            activation='tanh'
+            ))
+
+        logits = tf.nn.softmax(tflib.ops.Linear('MLP.1',output_t,self._n_hid,self._n_out))
+        new_state = tf.concat(1,[h_t,c_t,output_t,logits])
+
+        return logits,new_state
+
+def FreeRunIm2LatexAttention(
+    name,
+    ctx,
+    input_dim,
+    output_dim,
+    ENC_DIM,
+    DEC_DIM,
+    D,
+    H,
+    W
+    ):
+    """
+    Function that encodes the feature grid extracted from CNN using BiLSTM encoder
+    and decodes target sequences using an attentional decoder mechanism
+
+    PS: Feature grid can be of variable size (as long as size is within 'H' and 'W')
+
+    :parameters:
+        ctx - (N,C,H,W) format ; feature grid extracted from CNN
+        input_dim - int ; Dimensionality of input sequences (Usually, Embedding Dimension)
+        ENC_DIM - int; Dimensionality of BiLSTM Encoder
+        DEC_DIM - int; Dimensionality of Attentional Decoder
+        D - int; No. of channels in feature grid
+        H - int; Maximum height of feature grid
+        W - int; Maximum width of feature grid
+    """
+
+    V = tf.transpose(ctx,[0,2,3,1]) # (B, H, W, D)
+    V_cap = []
+    batch_size = tf.shape(ctx)[0]
+    count=0
+
+    h0_i_1 = tf.tile(tflib.param(
+        name+'.Enc_.init.h0_1',
+        np.zeros((1,H,2*ENC_DIM)).astype('float32')
+    ),[batch_size,1,1])
+
+    h0_i_2 = tf.tile(tflib.param(
+        name+'.Enc_init.h0_2',
+        np.zeros((1,H,2*ENC_DIM)).astype('float32')
+    ),[batch_size,1,1])
+
+
+    def fn(prev_out,i):
+    # for i in xrange(H):
+        return tflib.ops.BiLSTM(name+'.BiLSTMEncoder',V[:,i],D,ENC_DIM,h0_i_1[:,i],h0_i_2[:,i])
+
+    V_cap = tf.scan(fn,tf.range(tf.shape(V)[1]), initializer=tf.placeholder(shape=(None,None,2*ENC_DIM),dtype=tf.float32))
+
+    V_t = tf.reshape(tf.transpose(V_cap,[1,0,2,3]),[batch_size,-1,ENC_DIM*2]) # (B, L, ENC_DIM)
+
+    h0_dec = tf.concat(1,[tf.tile(tflib.param(
+        name+'.Decoder.init.h0',
+        np.zeros((1,3*DEC_DIM)).astype('float32')
+    ),[batch_size,1]),tf.reshape(tf.one_hot(500,output_dim),(batch_size,output_dim))])
+
+    inputs = tf.zeros((batch_size,160,100))
+
+    cell = tflib.ops.FreeRunIm2LatexAttentionCell(name+'.AttentionCell',input_dim,output_dim,DEC_DIM,H*W,2*ENC_DIM,V_t)
+    seq_len = tf.tile(tf.expand_dims(160,0),[batch_size])
+    out = tf.nn.dynamic_rnn(cell, inputs, initial_state=h0_dec, sequence_length=seq_len, swap_memory=True)
+    return out

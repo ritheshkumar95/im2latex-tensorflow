@@ -71,6 +71,7 @@ def predict(set='test',batch_size=1,visualize=True):
 
     imgs = np.asarray(imgs,dtype=np.float32).transpose(0,3,1,2)
     inp_seqs = np.zeros((batch_size,160)).astype('int32')
+    print imgs.shape
     inp_seqs[:,0] = np.load('properties.npy').tolist()['char_to_idx']['#START']
     tflib.ops.ctx_vector = []
 
@@ -170,7 +171,7 @@ for i in xrange(i,NB_EPOCHS):
     val_loss, val_perp = score('valid',BATCH_SIZE)
     if val_perp < best_perp:
         best_perp = val_perp
-        saver.save(sess,"weights_best.ckpt")
+        # saver.save(sess,"weights_best.ckpt")
         print "\tBest Perplexity Till Now! Saving state!"
     else:
         lr = lr * 0.5

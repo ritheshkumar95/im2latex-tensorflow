@@ -40,6 +40,17 @@ def pad_group_image(img, output_path, pad_size, buckets):
         new_im.save(output_path)
         return False
     new_size = buckets[j]
+    print new_size
+    new_im = Image.new("RGB", new_size, (255,255,255))
+    new_im.paste(old_im, (PAD_LEFT,PAD_TOP))
+    new_im.save(output_path)
+    return True
+
+def pad_image(img, output_path, pad_size, buckets):
+    PAD_TOP, PAD_LEFT, PAD_BOTTOM, PAD_RIGHT = pad_size
+    old_im = Image.open(img)
+    old_size = (old_im.size[0]+PAD_LEFT+PAD_RIGHT, old_im.size[1]+PAD_TOP+PAD_BOTTOM)
+    new_size = old_size
     new_im = Image.new("RGB", new_size, (255,255,255))
     new_im.paste(old_im, (PAD_LEFT,PAD_TOP))
     new_im.save(output_path)
