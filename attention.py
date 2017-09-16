@@ -40,8 +40,8 @@ predictions = tf.argmax(tf.nn.softmax(logits[:,-1]),axis=1)
 
 
 loss = tf.reshape(tf.nn.sparse_softmax_cross_entropy_with_logits(
-    tf.reshape(logits,[-1,V]),
-    tf.reshape(seqs[:,1:],[-1])
+    logits=tf.reshape(logits,[-1,V]),
+    labels=tf.reshape(seqs[:,1:],[-1])
     ), [tf.shape(X)[0], -1])
 
 mask_mult = tf.to_float(mask[:,1:])
@@ -132,7 +132,7 @@ init = tf.global_variables_initializer()
 # init = tf.initialize_all_variables()
 sess.run(init)
 saver = tf.train.Saver()
-saver.restore(sess,'./weights_best.ckpt')
+# saver.restore(sess,'./weights_best.ckpt')
 ## start the tensorflow QueueRunner's
 # tf.train.start_queue_runners(sess=sess)
 ## start our custom queue runner's threads
@@ -171,7 +171,7 @@ for i in xrange(i,NB_EPOCHS):
     val_loss, val_perp = score('valid',BATCH_SIZE)
     if val_perp < best_perp:
         best_perp = val_perp
-        # saver.save(sess,"weights_best.ckpt")
+        saver.save(sess,"weights_best.ckpt")
         print "\tBest Perplexity Till Now! Saving state!"
     else:
         lr = lr * 0.5
