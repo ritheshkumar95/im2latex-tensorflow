@@ -3,7 +3,6 @@ import time
 import threading
 import numpy as np
 import re
-import cv2
 import glob
 from PIL import Image
 
