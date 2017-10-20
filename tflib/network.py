@@ -69,7 +69,7 @@ def vgg16(X,num_feats=64):
 
     return X
 
-def im2latex_cnn(X, num_feats, bn, train_mode='True'):
+def im2latex_cnn(X, num_feats, bn, train_mode=True):
     X = X-128.
     X = X/128.
 
