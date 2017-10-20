@@ -34,7 +34,7 @@ target_seqs = seqs[:,1:]
 emb_seqs = tflib.ops.Embedding('Embedding',V,EMB_DIM,input_seqs)
 
 ctx = tflib.network.im2latex_cnn(X,NUM_FEATS_START,True)
-out,state = tflib.ops.im2latexAttention('AttLSTM',emb_seqs,ctx,EMB_DIM,ENC_DIM,DEC_DIM,D,H,W)
+out,state = tflib.ops.FreeRunIm2LatexAttention('AttLSTM',emb_seqs,ctx,EMB_DIM,ENC_DIM,DEC_DIM,D,H,W)
 logits = tflib.ops.Linear('MLP.1',out,DEC_DIM,V)
 predictions = tf.argmax(tf.nn.softmax(logits[:,-1]),axis=1)
 
