@@ -145,7 +145,7 @@ attention.py scores the train set and validation set after each epoch (measures 
 ![results_2](results_2.png)
 
 ## Weight files
-[Google Drive](https://drive.google.com/drive/folders/0BwbIUfIM1M8sc0tEMGk1NGlKZTA?usp=sharing)
+[Google Drive](https://drive.google.com/drive/folders/0BwbIUfIM1M8sc0tEMGk1NGlKZTA?resourcekey=0-oRKU3d5c8GsGm0Er0eLIjg&usp=sharing)
 
 ## Visualizing the attention mechanism
 
